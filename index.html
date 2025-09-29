@@ -1,1513 +1,791 @@
 <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>HCC Lab</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+      body { margin:0; font-family: Arial, sans-serif; background:#f6f8fb; color:#1f2937; }
 
-<html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Human-Centered Computing Lab</title>
-<!-- Tailwind CSS CDN for utility classes -->
-<script src="https://cdn.tailwindcss.com"></script>
-<!-- Google Fonts - Inter -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-<style>
-        /* Custom CSS for animations and overrides */
-        body {
-            font-family: 'Inter', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            /* A very light off-white background for a clean, modern look */
-            background-color: #F9FAFB;
-        }
+      /* ===== HEADER SECTION ===== */
+      .header-section { background:#fff; padding-bottom:40px; }
+      table { width:100%; border-collapse:collapse; table-layout:fixed; background:white; margin-bottom:40px; }
+      td { border:1px solid transparent; vertical-align:middle; }
+      .col1 { width:calc((100% - 150px) * 3 / 6); text-align:right; overflow:hidden; }
+      .col2 { width:150px; text-align:center; }
+      .col3 { width:calc((100% - 150px) * 3 / 6); text-align:left; overflow:hidden; }
+      .side-img { width:50%; height:auto; position:relative; }
+      .logo { max-width:100%; height:auto; }
+      .content { padding:0 24px; text-align:center; }
+      .content h1 { font-size:42px; margin:0 0 16px; }
+      .content h2 { font-size:32px; margin:0 0 24px; color:#374151; }
+      .content p { font-size:22px; line-height:1.8; max-width:880px; margin:0 auto; color:#374151; }
 
-        .page-section {
-            display: none; /* Hidden by default */
-            animation: fadeIn 0.7s ease-out forwards;
-        }
+      /* ===== CARDS SECTION ===== */
+      .cards-section { background:#f9fafb; padding:40px 24px 60px; }
+      .cards { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+      .card { background:#fff; border-radius:18px; box-shadow:0 12px 24px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.05); overflow:hidden; }
+      .card-photo { padding:18px; }
+      .card-photo img { display:block; width:100%; height:auto; border-radius:14px; }
+      .card-photo .caption { margin:18px 6px 8px; color:#6b7280; font-size:20px; line-height:1.7; }
+      .card-about { padding:30px; }
+      .card-about h3 { margin:0 0 16px; font-size:36px; color:#0f172a; }
+      .card-about p.lead { margin:0 0 24px; font-size:20px; color:#4b5563; line-height:1.9; }
+      .card-about h4 { margin:10px 0 16px; font-size:26px; color:#111827; }
+      .card-about ul { margin:0 0 28px 22px; padding:0; font-size:20px; color:#374151; line-height:2; }
+      .card-about .btn { display:inline-block; padding:16px 24px; border-radius:9999px; background:#FFBB00; color:#fff; text-decoration:none; font-weight:600; font-size:20px; box-shadow:0 6px 18px rgba(37,99,235,0.25); cursor:pointer; }
+      .card-about .btn:hover { filter:brightness(1.05); }
 
-        .page-section.active {
-            display: block; /* Shown when active */
-        }
+      /* ===== COLLAPSIBLE SECTIONS ===== */
+      .collapsible-section, .about-section { max-width: 1200px; margin:40px auto; background:#fff; border-radius:14px; box-shadow:0 6px 16px rgba(0,0,0,0.08); overflow:hidden; }
+      .section-header, .about-header {padding:16px 24px;background:#e5e7eb;cursor:pointer;font-size:28px;font-weight:bold;color:#0f172a;text-align:center;user-select:none;}
+      .section-content, .about-content { display:none; padding:24px 30px; }
+      .section-header, .about-header { position: relative; }
+      .section-header .subtitle, .about-header .subtitle {display:block;font-size:20px;font-weight:500;color:#6b7280;margin-top:4px;}
+      .section-header .title, .about-header .title {font-size:28px;font-weight:800;color:#0f172a;line-height:1.1;}
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+      /* ===== TEAM GRID ===== */
+      .team-grid { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:20px; align-items:stretch; }
+      .team-spacer { display:block; }
+      .team-card { background:#fff; border-radius:16px; box-shadow:0 10px 24px rgba(0,0,0,0.08); padding:22px; text-align:center; transition: transform .2s ease, box-shadow .2s ease; }
+      .team-card:hover { transform:translateY(-4px); box-shadow:0 16px 36px rgba(0,0,0,0.12); }
+      .team-photo { width:120px; height:120px; border-radius:9999px; object-fit:cover; border:4px solid #e5e7eb; display:block; margin:0 auto 12px; }
+      .team-name { font-size:20px; font-weight:800; letter-spacing:.4px; color:#111827; margin:6px 0 4px; text-transform:uppercase; }
+      .team-role { font-size:18px; color:#6b7280; margin-bottom:10px; text-transform:uppercase; letter-spacing:.3px; }
+      .team-desc { font-size:18px; color:#374151; line-height:1.6; display:none; margin-top:8px; }
+      .team-links { display:flex; justify-content:center; gap:16px; margin-top:8px; }
+      .team-links a { color:#6b7280; font-size:20px; transition:color .2s; }
+      .team-links a:hover { color:#2563eb; }
 
-        .nav-item {
-            position: relative;
-            padding-bottom: 6px; /* Space for the animated underline */
-        }
-        .nav-item::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 0;
-            height: 2px;
-            background-color: #D1D5DB; /* Subtle gray underline */
-            transition: width 0.3s ease-out;
-        }
-        .nav-item:hover::after,
-        .nav-item.active::after {
-            width: 100%;
-        }
+      /* ===== PROJECTS ===== */
+      .projects-grid{display:grid;grid-template-columns: repeat(2, minmax(0,1fr));gap:18px;}
+      @media (max-width: 900px){
+        .cards { grid-template-columns:1fr; }
+        .team-grid{ grid-template-columns:1fr; }
+        .projects-grid{ grid-template-columns:1fr; }
+      }
+      .project-card{background:#fff;border-radius:16px;box-shadow:0 8px 18px rgba(0,0,0,.12);overflow:hidden;display:flex;flex-direction:column;transition:transform .2s ease, box-shadow .2s ease;}
+      .project-card:hover{transform:translateY(-4px);box-shadow:0 14px 28px rgba(0,0,0,.18);}
 
-        /* Subtle glow effect on hover for the logo */
-        .logo-glow:hover {
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
-            transition: filter 0.3s ease-in-out;
-        }
+      .news-card {transition: transform 0.3s ease, box-shadow 0.3s ease;}
+      .news-card:hover {transform: translateY(-6px);box-shadow: 0 12px 24px rgba(0,0,0,0.15);}
 
-        /* Specific styles for better project cards with a unified height */
-        .project-card {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        .project-card img {
-            object-fit: cover;
-        }
-        .project-card .card-content {
-            flex-grow: 1;
-        }
+      .project-card img{width:100%;height:220px;object-fit:cover;display:block;}
+      .project-card .card-body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;}
+      .project-title{margin:0;font-size:22px;font-weight:700;line-height:1.25;color:#111827;}
+      .project-text{margin:0;font-size:20px;line-height:1.5;color:#374151;}
+      .project-link{align-self:flex-start;text-decoration:none;background:#ffbb00;color:#fff;font-weight:600;padding:10px 16px;border-radius:999px;}
+      .project-link:hover{ background:#ffbb00; }
     
-        /* Split title basics */
-        .split-title .char {
-            display: inline-block;
-            will-change: transform;
-            transform: translate3d(0,0,0);
-        }
-        .split-title {
-            letter-spacing: -0.02em;
-        }
-        /* Prevent layout jump as we translate letters */
-        #lucid-hero {
-            contain: layout paint;
-        }
+      /* ===== PUBLICATIONS ===== */
+      .pubs-grid{display:grid;grid-template-columns: 1fr;gap:16px;}
+      .pub-card{background:#ffffff;border-radius:16px;box-shadow:0 8px 18px rgba(0,0,0,.12);padding:18px 20px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s ease, box-shadow .2s ease;}
+      .pub-title{margin:0 0 8px 0;font-size:26px;font-weight:800;color:#0f172a;}
+      .pub-list{margin:0;padding-left:18px;color:#374151; font-size:24px;}
+      .pub-list li{ margin:8px 0; line-height:1.6; }
+      .pub-meta{ display:block; font-size:22px; color:#6b7280; margin-top:2px; }
+      .pub-link{display:inline-block; margin-top:6px; text-decoration:none; font-weight:600;background:#ffbb00; color:#fff; padding:8px 12px; border-radius:999px;}
+      .pub-link:hover{ background:#ffbb00; }
+      .pub-links {margin-top: 0px;display: flex;gap: 10px;flex-wrap: wrap;}
+      .pub-link i {margin-right: 6px;}
+    
+      /* ===== NEWS ===== */
+      .news-grid{display:grid;grid-template-columns:1fr;gap:16px;}
+      .news-card{background:#fff;border-radius:16px;box-shadow:0 8px 18px rgba(0,0,0,.12);overflow:hidden;}
+      .news-img{width:100%;height: 352px;object-fit:cover;display:block;}
+      .news-body{padding:16px 20px;}
+      .news-header-row:hover{opacity:.9;}
+      .news-title{margin:0;font-size:22px;font-weight:800;color:#0f172a;}
+      .news-date{margin-top:4px;font-size:20px;color:#6b7280;}
+      .news-text{margin:0;font-size:20px;line-height:1.5;color:#374151;}
+
+    
+    /* ===== Modern Footer ===== */
+    .footer { background:#000; color:#fff; padding:80px 24px;}
+    .footer-container {width:100%; margin:0 0 0 0;display:grid; grid-template-columns:1fr; gap:48px; align-items:start;}
+    @media (min-width: 768px) {
+      .footer-container { grid-template-columns:1fr 1fr; gap:64px; }
+    }
+    .footer h2 { font-size:44px; font-weight:800; line-height:1.1; margin:0 0 16px; }
+    @media (min-width: 768px){ .footer h2 { font-size:56px; } }
+    .footer p { margin:0 0 14px; }
+    .footer .muted { color:#d1d5db; }
+    .footer .muted2 { color:#9ca3af; }
+    .footer ul { list-style:none; padding:0; margin:0; }
+    .footer li { display:flex; align-items:flex-start; gap:12px; margin:16px 0; font-size:23px; }
+    .footer .emoji { font-size:22px; line-height:1; color:#f59e0b; }
+    .footer a { color:#93c5fd; text-decoration:none; }
+    .footer a:hover { text-decoration:underline; }
+    .footer .map-wrap { border-radius:16px; overflow:hidden; box-shadow:0 25px 50px -12px rgba(255,255,255,.1), 0 8px 24px rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.1) }
+    .footer .copyright { font-size:13px; color:#9ca3af; margin-top:20px; }
+
+    html { scroll-behavior: smooth; }
+
+/* Button hover effects (same as Learn more...) */
+.project-link, .pub-link, .btn {transition: 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;}
+.project-link:hover, .pub-link:hover, .btn:hover {transform: translateY(-2px) scale(1.05);box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);}
+
+/* Hover effect for main collapsible bars */
+.section-header:hover, .about-header:hover {background: #f9fafb;box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);transform: translateY(-2px);transition: all 0.3s ease;}
+
+/* Hover effect for header nav links */
+header.site-header .nav-links a {transition: color 0.3s ease, transform 0.2s ease;}
+header.site-header .nav-links a:hover {color: #ffbb00;transform: translateY(-2px);}
+
+/* Hover effect for picture card in home */
+.picture-card {transition: transform 0.3s ease, box-shadow 0.3s ease;}
+.picture-card:hover {transform: scale(1.03);box-shadow: 0 12px 24px rgba(0,0,0,0.2);}
+
+/* Hover effect for header title link */
+.lab-title-link {transition: color 0.3s ease, transform 0.2s ease;}
+.lab-title-link:hover {color: #ffbb00;transform: translateY(-2px);}
 
 
-        /* Curtain-style split title updates */
-        .split-title .word {
-            will-change: transform;
-            transform: translate3d(0,0,0);
-        }
-        /* Keep letter spacing stable while moving */
-        .split-title { letter-spacing: -0.02em; }
-
-
-        /* Size SVG word images responsively */
-        .split-title img.word-img {
-            height: clamp(3rem, 10vw, 7rem);
-            width: auto;
-            display: block;
-        }
-
-
-        /* Centered single-title look: zero gap; use a narrow spacer to mimic the space between words */
-        #splitTitle { gap: 0; }
-        #splitTitle .spacer { width: 0.6em; height: 1px; }
-        .split-title .word { will-change: transform; transform: translate3d(0,0,0); }
-
-
-        #splitTitle { white-space: nowrap; justify-content: center; align-items: center; }
-
-
-        /* Start perfectly centered as one title, with a tiny space only */
-        #splitTitle { gap: 0; justify-content: center; align-items: center; white-space: nowrap; }
-        #splitTitle .spacer { width: 0.3em; height: 1px; display: inline-block; }
-        .split-title .word { display: inline-block; margin: 0; padding: 0; will-change: transform; transform: translate3d(0,0,0); }
-        .split-title img.word-img { display: block; vertical-align: baseline; }
-
-
-        #splitTitle { gap: 0 !important; }
-        #splitTitle .word { margin: 0; padding: 0; }
-
-
-        /* Zero-gap start: make the two words butt together exactly */
-        #splitTitle { gap: 0 !important; justify-content: center; align-items: center; white-space: nowrap; }
-        #splitTitle .word { display: inline-block; margin: 0; padding: 0; line-height: 0; }
-        #splitTitle img.word-img { display: block; height: clamp(3rem, 10vw, 7rem); width: auto; }
-
-
-        /* Centered pair at rest, with controlled gap (handled in JS) */
-        #splitTitle { gap: 0 !important; justify-content: center; align-items: center; white-space: nowrap; }
-        #splitTitle .word { display: inline-block; margin: 0; padding: 0; line-height: 0; }
-        #splitTitle img.word-img { display: block; height: clamp(3rem, 10vw, 7rem); width: auto; }
-
-
-        /* Keep the two images on one line, centered */
-        #splitTitle { display:flex; flex-direction:row; gap: 0 !important; justify-content: center; align-items: center; white-space: nowrap; }
-        #splitTitle .word { display:inline-flex; align-items:center; margin:0; padding:0; line-height:0; }
-        #splitTitle img.word-img { display:block; height: clamp(3rem, 10vw, 7rem); width:auto; object-fit:contain; }
-
-
-        /* Robust hero layout */
-        #splitTitle {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: nowrap;
-          gap: 0 !important;
-          justify-content: center;
-          align-items: center;
-          white-space: nowrap;
-        }
-        #splitTitle .word {
-          display: inline-flex;
-          align-items: center;
-          margin: 0;
-          padding: 0;
-          line-height: 0;
-          will-change: transform;
-          transform: translate3d(0,0,0);
-        }
-        /* Use a shared height so HCC and LAB are the same size */
-        :root { --heroWordH: clamp(64px, 10vw, 128px); }
-        #splitTitle img.word-img {
-          display: block;
-          height: var(--heroWordH);
-          width: auto;
-          object-fit: contain;
-        }
-
-
-        /* Table-style hero */
-        .hero-table { position: relative; }
-        .hero-table .cells { position: relative; }
-        .hero-table .cell { background: transparent; }
-.hero-table .frame {
-  border: none !important;
-}
-        .hero-table .divider {
-          position: absolute;
-          top: 0; bottom: 0;
-          left: 50%;
-          width: 4px;
-          background: #ffffff;
-          transform: translateX(-50%);
-        }
-        /* Same sizing for both words */
-        :root { --heroWordH: clamp(64px, 10vw, 128px); }
-        .hero-table .word-img { display:block; height: var(--heroWordH); width:auto; object-fit:contain; }
-        .hero-table .word { will-change: transform; transform: translate3d(0,0,0); }
-
-
-        /* Force inner-edge alignment at rest inside cells */
-        .hero-table .cell { display:flex; }
-.hero-table #cellLeft .word  { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
-.hero-table #cellRight .word { position: absolute; left: 0;  top: 50%; transform: translateY(-50%); }
-
-        .hero-table .word { display:inline-block; will-change: transform; transform: translate3d(0,0,0); }
-        .hero-table .word-img { display:block; height: var(--heroWordH); width:auto; object-fit:contain; }
-
-
-        /* Pin words to inner edges at rest */
-        .hero-table #cellLeft .word  { margin-left: auto; margin-right: 0; }
-        .hero-table #cellRight .word { margin-right: auto; margin-left: 0; }
-        /* Make cells positioning context explicit */
-        .hero-table .cell { position: relative; }
-
-
-        /* Absolute pin to inner divider to guarantee start positions */
-        .hero-table .cell { position: relative; }
-        .hero-table #cellLeft .word  { position: absolute; right: 0; left: auto; top: 50%; transform: translate(0,-50%); }
-        .hero-table #cellRight .word { position: absolute; left: 0;  right: auto; top: 50%; transform: translate(0,-50%); }
-        /* Ensure images scale consistently */
-        :root { --heroWordH: clamp(64px, 10vw, 128px); }
-        .hero-table .word-img { height: var(--heroWordH); width: auto; display: block; object-fit: contain; }
+/* === Normalize spacing for main collapsible bars === */
+.collapsible-section, .about-section { max-width: 1200px; margin: 28px auto; }
+.collapsible-section:last-of-type { margin-bottom: 0; }
 
 </style>
+  </head>
+  <body id="top">
 
-<style>
-  /* Make prefooter adopt main background color */
-  main { position: relative; } /* ensure main is styled */
-  #prefooter-nav {
-    background-color: inherit;
-  }
-</style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<style>
-  /* Prefooter previews behave like cards (robust) */
-  #prefooter-nav, #prefooter-rows { overflow: visible !important; }
-
-  /* Target direct children (anchors) and any .prefooter-card */
-  #prefooter-nav #prefooter-rows > a,
-  #prefooter-nav .prefooter-card {
-    display: block;
-    border-radius: 12px;
-    /* don't force background or text color—keep existing theme */
-    transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    will-change: transform, box-shadow;
-    cursor: pointer;
-    position: relative;
-  }
-
-  /* Hover = lifted + deeper shadow, no brightness/color change */
-  #prefooter-nav #prefooter-rows > a:hover,
-  #prefooter-nav .prefooter-card:hover {
-    transform: translateY(-8px) !important;
-    box-shadow: 0 18px 36px rgba(0,0,0,0.20) !important;
-    filter: none !important;
-  }
-
-  /* Prevent inner elements from hijacking hover visuals */
-  #prefooter-nav #prefooter-rows > a > *,
-  #prefooter-nav .prefooter-card > * {
-    pointer-events: none;
-  }
-</style>
-
-</head>
-<body class="min-h-screen antialiased text-gray-800">
-<!-- Navigation Bar -->
-<nav class="bg-gray-950 shadow-2xl p-4 sticky top-0 z-50">
-<div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
-<!-- Logo with sleek glow effect -->
-<div class="flex items-center text-gray-50 text-2xl font-extrabold mb-4 md:mb-0 transition-transform transform hover:scale-105">
-<img alt="Towson University Logo" class="h-10 w-10 mr-2 rounded logo-glow" id="university-logo" onerror="this.onerror=null;this.src='https://placehold.co/40x40/CCCCCC/666666?text=Logo';" src="TU_Logo.png"/>
-<span class="ml-2">HUMAN-CENTERED COMPUTING LAB</span>
-</div>
-<!-- Navigation Links -->
-<ul class="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2">
-<li>
-<button class="text-gray-400 hover:text-gray-100 font-medium text-lg px-3 py-2 rounded-md transition-colors duration-200 nav-item" id="nav-home">
-                        HOME
-                    </button>
-</li>
-<li>
-<button class="text-gray-400 hover:text-gray-100 font-medium text-lg px-3 py-2 rounded-md transition-colors duration-200 nav-item" id="nav-about">
-                        ABOUT
-                    </button>
-</li>
-<li>
-<button class="text-gray-400 hover:text-gray-100 font-medium text-lg px-3 py-2 rounded-md transition-colors duration-200 nav-item" id="nav-team">
-                        TEAM
-                    </button>
-</li>
-<li>
-<button class="text-gray-400 hover:text-gray-100 font-medium text-lg px-3 py-2 rounded-md transition-colors duration-200 nav-item" id="nav-projects">
-                        PROJECTS
-                    </button>
-</li>
-<li>
-<button class="text-gray-400 hover:text-gray-100 font-medium text-lg px-3 py-2 rounded-md transition-colors duration-200 nav-item" id="nav-news">
-                        NEWS
-                    </button>
-</li>
-<li>
-<button class="text-gray-400 hover:text-gray-100 font-medium text-lg px-3 py-2 rounded-md transition-colors duration-200 nav-item" id="nav-faq">
-                        FAQ
-                    </button>
-</li>
-</ul>
-</div>
-</nav>
-<!-- Main Content Area -->
-<main class="container mx-auto py-12 px-4 md:px-0">
-<!-- Home Page Section -->
-<section class="page-section" id="home-page">
-<!-- Animated Split Title Hero -->
-<!-- Boxed table-style hero -->
-<section class="relative min-h-[40vh] grid place-items-center overflow-hidden" id="lucid-hero">
-<div class="hero-table relative w-[92%] max-w-5xl" id="heroTable">
-<div class="cells grid grid-cols-2">
-<!-- Left cell -->
-<div class="cell left relative" id="cellLeft">
-<div class="word">
-<img alt="HCC" class="word-img" src="header HCC.png"/>
-</div>
-</div>
-<div class="cell right relative" id="cellRight">
-<div class="word">
-<img alt="LAB" class="word-img" src="header LAB gold.png"/>
-</div>
-</div>
-</div>
-<!-- Fixed centered HCC logo (does not move with scroll) -->
-<div class="absolute inset-0 flex items-center justify-center pointer-events-none z-20" id="midLogoWrap">
-  <img src="HCC logo 3.png" alt="HCC Logo" id="midLogo" style="height: calc(var(--heroWordH) * 0.6 * 3); width: auto; filter: drop-shadow(0 2px 6px rgba(0,0,0,.35));" />
-</div>
-<!-- Center dividerand frame -->
-<div aria-hidden="true" class="divider"></div>
-<div aria-hidden="true" class="frame"></div>
-</div>
-</section>
-<header class="text-center mb-16">
-<h1 class="text-6xl font-extrabold text-gray-900 mb-4 tracking-tight leading-tight"></h1>
-<p class="text-2xl text-gray-700 font-light mb-6"></p>
-<p class="text-lg text-gray-600 max-w-2xl mx-auto"></p>
+<!-- ===== SITE HEADER ===== -->
+<header class="site-header" style="background:#000; color:#fff; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:1000; box-shadow:0 2px 10px rgba(0,0,0,.2); backdrop-filter:saturate(1.2);">
+  <div class="logo-title" style="display:flex; align-items:center; gap:14px;">
+    <img src="TU_LOGO.png" alt="HCC Logo" style="height:48px; width:auto;">
+    <a href="#top" class="lab-title-link" style="font-size:22px; font-weight:700; color:#fff; text-decoration:none;">Human-Centered Computing Lab</a>
+  </div>
+  <nav class="nav-links" style="display:flex; gap:24px; font-size:16px; font-weight:600;">
+    <a href="#" data-target="about"  style="color:#fff; text-decoration:none;">About</a>
+    <a href="#" data-target="team"  style="color:#fff; text-decoration:none;">Team</a>
+    <a href="#" data-target="projects"  style="color:#fff; text-decoration:none;">Projects</a>
+    <a href="#" data-target="publications"  style="color:#fff; text-decoration:none;">Publications</a>
+    <a href="#" data-target="news"  style="color:#fff; text-decoration:none;">News</a>
+    <a href="#" data-target="contact"  style="color:#fff; text-decoration:none;">Contact</a>
+  </nav>
 </header>
-<!-- Group Picture & About Summary -->
-<section class="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto mb-20 items-center">
-<div class="bg-white p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-<img alt="HCC Lab Group Photo" class="w-full h-auto rounded-xl mb-4 object-cover" id="group-photo" onerror="this.onerror=null;this.src='https://placehold.co/600x400/CCCCCC/666666?text=Group+Photo';" src="Group_pic.jpg"/>
-<p class="text-gray-700 leading-relaxed text-sm">A snapshot of our dedicated team at the Human-Centered Computing Lab, Towson University.</p>
-</div>
-<div class="bg-white p-8 rounded-2xl shadow-xl">
-<h2 class="text-4xl font-bold text-gray-800 mb-4" id="home-about-summary-title"></h2>
-<p class="text-gray-700 leading-relaxed mb-6" id="home-about-summary-mission"></p>
-<h3 class="text-2xl font-semibold text-gray-700 mb-4" id="home-about-summary-focus-title"></h3>
-<ul class="list-disc list-inside text-gray-700 space-y-2" id="home-about-summary-focus-list">
-<!-- Points will be injected here by JS -->
-</ul>
-<a class="mt-8 inline-block bg-blue-600 text-white font-semibold py-3 px-8 rounded-full hover:bg-blue-700 transition-colors duration-200 shadow-lg transform hover:scale-105" href="#" id="home-about-link">
-                        Learn More About Us
-                    </a>
-        <a class="mt-8 inline-block bg-blue-600 text-white font-semibold py-3 px-8 rounded-full hover:bg-blue-700 transition-colors duration-200 shadow-lg transform hover:scale-105"
-   href="https://docs.google.com/document/d/1C-c5atpjDjAz5co12WMt7FrDWxRf987RJGZa8uKD2KU/edit?usp=sharing" target="_blank">
-   Weekly Schedule of HCC Lab 2025
-</a>
 
-</div>
+    <!-- ===== HEADER SECTION ===== -->
+    <section class="header-section">
+      <table><br><br>
+        <tr>
+          <td class="col1"><img id="imgLeft" src="header HCC.png" class="side-img" alt="Left header image"></td>
+          <td class="col2"><img src="HCC logo 3.png" class="logo" alt="HCC Logo"></td>
+          <td class="col3"><img id="imgRight" src="header LAB gold.png" class="side-img" alt="Right header image"></td>
+        </tr>
+      </table>
+      <div class="content">
+        <h1>Human-Centered Computing Lab</h1>
+        <h2>WELCOME TO RESEARCH THAT PUTS HUMANS FIRST!</h2>
+        <p>We are a research lab dedicated to human-centered computing <br>where technology is designed with and for people.</p>
+      </div>
+    </section>
+
+    <!-- ===== CARDS SECTION ===== -->
+    <section class="cards-section">
+      <div class="cards">
+        <article class="card card-photo">
+          <img src="Group_pic_crop.png" alt="HCC Lab group photo">
+          <p class="caption">A snapshot of our dedicated team at the Human-Centered Computing Lab.</p>
+        </article>
+        <article class="card card-about">
+          <h3>About Our Lab</h3>
+          <p class="lead">Our mission is to design transparent, trustworthy, ethical, inclusive, and human-centered computing systems.</p>
+          <h4>Our research focuses on:</h4>
+          <ul>
+            <li>Human–AI co-creation</li>
+            <li>Human–AI interaction</li>
+            <li>Explainable and ethical AI</li>
+            <li>Accessibility and inclusivity</li>
+            <li>Trust and transparency in computing</li>
+          </ul>
+          <a class="btn" id="scrollToAbout">Learn More About Us</a>
+        </article>
+      </div>
+
+      <!-- Accordion About Section (from table3) -->
+      <div class="about-section" id="aboutSection">
+        <div class="about-header" id="aboutHeader"><span class="title">About</span><span class="subtitle">Who we are & what we do</span></div>
+        <div class="about-content" id="aboutContent">
+          <h3>Our Mission</h3>
+          <p>
+            Our mission is to design transparent, trustworthy, ethical, inclusive, and human-centered computing systems.
+          </p>
+
+          <h3>Our research focuses on:</h3>
+          <ul>
+            <li>Human–AI co-creation</li>
+            <li>Human–AI interaction</li>
+            <li>Explainable and ethical AI</li>
+            <li>Accessibility and inclusivity</li>
+            <li>Trust and transparency in computing</li>
+          </ul>
+
+          <h3>What is Human-Centered Computing?</h3>
+          <p>
+            Human-Centered Computing (HCC) is an interdisciplinary field that focuses on designing, developing, and evaluating technology that prioritizes human needs, experiences, capabilities, values, and social contexts.
+          </p>
+
+          <h3>Why does it matter?</h3>
+          <ul>
+            <li>Enhances user experience, users' skill and creativity.</li>
+            <li>Ensures ethical and responsible technology development.</li>
+            <li>Bridges the gap between humans and complex computing systems.</li>
+            <li>Drives innovation by integrating human needs into technology design.</li>
+          </ul>
+          <br><br>
+          <h3>Frequently Asked Questions</h3>
+          <div class="faq-item">
+            <strong>What is Human-Centered Computing (HCC)?</strong>
+            <p>Human-Centered Computing is an interdisciplinary field focused on the design, development, and evaluation of technology that prioritizes human needs, experiences, and well-being. It aims to create intuitive, effective, and ethical computing systems.</p>
+          </div>
+          <div class="faq-item">
+            <strong>How can I join the HCC Lab at Towson University?</strong>
+            <p>Prospective students (undergraduate and graduate) interested in research opportunities can reach out to Dr. Jeba Rezwana, the HCC Lab Director, via email. Please include your resume, academic interests, and why you are interested in HCC research.</p>
+          </div>
+          <div class="faq-item">
+            <strong>What kind of projects does the HCC Lab work on?</strong>
+            <p>Our lab engages in diverse projects, including human-AI co-creation, ethical AI design, accessibility in generative AI, and human-AI interaction in educational contexts. You can find more details on our 'Projects' page.</p>
+          </div>
+          <div class="faq-item">
+            <strong>Are there opportunities for undergraduate students?</strong>
+            <p>Yes, we encourage passionate undergraduate students to get involved! Opportunities may include assisting with ongoing research, data collection, literature reviews, and participating in lab meetings. Please contact the lab director for availability.</p>
+          </div>
+          <div class="faq-item">
+            <strong>Where is the HCC Lab located?</strong>
+            <p>The HCC Lab is part of Towson University. Specific lab room numbers and building details can be provided upon direct inquiry.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Collapsible Team Section (from table4) -->
+      <div class="collapsible-section" id="teamSection">
+        <div class="section-header" id="teamHeader"><span class="title">Team</span><span class="subtitle">Meet the people behind the research</span></div>
+        <div class="section-content" id="teamContent">
+          <!-- Row 1: Rezwana -->
+          <div class="team-grid">
+            <div class="team-spacer"></div>
+            <div class="team-card">
+              <img class="team-photo" src="Jeba.png" alt="DR JEBA REZWANA">
+              <div class="team-name">DR JEBA REZWANA</div>
+              <div class="team-role"><strong>HCC LAB DIRECTOR</strong></div>
+              <div class="team-links">
+                <a href="https://sites.google.com/view/jebarezwana"><i class="fa-solid fa-globe"></i></a>
+                <a href="https://scholar.google.com/citations?user=FqT39e4AAAAJ&hl=en&oi=ao"><i class="fa-solid fa-graduation-cap"></i></a>
+                <a href="https://www.linkedin.com/in/jrezwana005/"><i class="fa-brands fa-linkedin"></i></a>
+              </div>
+              <div class="team-desc">Her research interests focus on Human-Computer Interaction in the subfields of Human-AI Co-Creation, Interaction Design, Ethical Human-Centered AI, and AI for CS Education.</div>
+            </div>
+            <div class="team-spacer"></div>
+          </div>
+
+          <!-- Row 2: Leedy–Mackenzie–Giancarlo -->
+          <div class="team-grid" style="margin-top:20px;">
+            <div class="team-card">
+              <img class="team-photo" src="Katelyn.jpg" alt="KATELYN LEEDY">
+              <div class="team-name">KATELYN LEEDY</div>
+              <div class="team-role">PHD STUDENT</div>
+              <div class="team-links">
+                <a href="#"><i class="fa-solid fa-globe"></i></a>
+                <a href=""><i class="fa-solid fa-graduation-cap"></i></a>
+                <a href="https://www.linkedin.com/in/katelyn-leedy1030/"><i class="fa-brands fa-linkedin"></i></a>
+              </div>
+              <div class="team-desc">Katelyn’s research interests include Human-Centered Computing and Human-AI Collaboration, focusing on designing collaborative systems that enhance creativity and user engagement.</div>
+            </div>
+            <div class="team-card">
+              <img class="team-photo" src="Mackenzie.jpg" alt="MACKENZIE PRESTON">
+              <div class="team-name">MACKENZIE PRESTON</div>
+              <div class="team-role">MASTERS STUDENT</div>
+              <div class="team-links">
+                <a href="#"><i class="fa-solid fa-globe"></i></a>
+                <a href="#"><i class="fa-solid fa-graduation-cap"></i></a>
+                <a href="https://www.linkedin.com/in/makenzie-preston-856b5220b/"><i class="fa-brands fa-linkedin"></i></a>
+              </div>
+              <div class="team-desc">Mackenzie’s work focuses on Human-AI Co-Creation and Ethical AI, particularly on trust, transparency, and responsible design practices in creative domains.</div>
+            </div>
+            <div class="team-card">
+              <img class="team-photo" src="Giancarlo.png" alt="GIANCARLO COLLOCA">
+              <div class="team-name">GIANCARLO COLLOCA</div>
+              <div class="team-role">PHD STUDENT</div>
+              <div class="team-links">
+                <a href="https://www.jinkoll.com"><i class="fa-solid fa-globe"></i></a>
+                <a href="https://scholar.google.com/citations?user=cLQXLlAAAAAJ&hl=en&oi=ao"><i class="fa-solid fa-graduation-cap"></i></a>
+                <a href="https://www.linkedin.com/in/giancarlocolloca/"><i class="fa-brands fa-linkedin"></i></a>
+              </div>
+              <div class="team-desc">Giancarlo’s research interests center on Human-AI Interaction, investigating how to create transparent, ethical, and collaborative AI systems for educational contexts.</div>
+            </div>
+          </div>
+
+          <!-- Row 3: Mazumder–Savalgi–Haotong -->
+          <div class="team-grid" style="margin-top:20px;">
+            <div class="team-card">
+              <img class="team-photo" src="Ayon.jpg" alt="AYON MAZUMDER">
+              <div class="team-name">AYON MAZUMDER</div>
+              <div class="team-role">PHD STUDENT</div>
+              <div class="team-links">
+                <a href="#"><i class="fa-solid fa-globe"></i></a>
+                <a href="#"><i class="fa-solid fa-graduation-cap"></i></a>
+                <a href="https://www.linkedin.com/in/ayon-mazumder-1b1100163/"><i class="fa-brands fa-linkedin"></i></a>
+              </div>
+              <div class="team-desc">Ayon’s research includes Human-Centered AI and Human-AI Co-Creation, particularly focusing on user mental models and transparency in AI-supported design tools.</div>
+            </div>
+            <div class="team-card">
+              <img class="team-photo" src="Neha.jpg" alt="NEHA SAVALGI">
+              <div class="team-name">NEHA SANJAY SAVALGI</div>
+              <div class="team-role">MASTERS STUDENT</div>
+              <div class="team-links">
+                <a href="#"><i class="fa-solid fa-globe"></i></a>
+                <a href="#"><i class="fa-solid fa-graduation-cap"></i></a>
+                <a href="https://www.linkedin.com/in/neha-sanjay-savalgi-908aa1290/"><i class="fa-brands fa-linkedin"></i></a>
+              </div>
+              <div class="team-desc">Neha is interested in accessibility and inclusivity in Human-Centered Computing, and contributes to projects on ethical and transparent design of AI systems.</div>
+            </div>
+            <div class="team-card">
+              <img class="team-photo" src="Haotong.jpg" alt="HAOTONG ZHU">
+              <div class="team-name">HAOTONG ZHU</div>
+              <div class="team-role">MASTERS GRADUATE</div>
+              <div class="team-links">
+                <a href="#"><i class="fa-solid fa-globe"></i></a>
+                <a href="#"><i class="fa-solid fa-graduation-cap"></i></a>
+                <a href="https://www.linkedin.com/in/haotong-zhu/"><i class="fa-brands fa-linkedin"></i></a>
+              </div>
+              <div class="team-desc">Haotong’s research focused on Explainable AI and Human-Centered Computing, exploring how to make AI decisions more transparent and interpretable for users.</div>
+            </div>
+          </div>
+
+          <!-- Row 4: Sandeep -->
+          <div class="team-grid" style="margin-top:20px;">
+            <div class="team-spacer"></div>
+            <div class="team-card">
+              <img class="team-photo" src="Sandeep.jpg" alt="SANDEEP NIRMALRAJ">
+              <div class="team-name">SANDEEP NIRMALRAJ</div>
+              <div class="team-role">RESEARCH ASSISTANT</div>
+              <div class="team-links">
+                <a href="#"><i class="fa-solid fa-globe"></i></a>
+                <a href="#"><i class="fa-solid fa-graduation-cap"></i></a>
+                <a href="https://www.linkedin.com/in/sandeep-n-sn10/"><i class="fa-brands fa-linkedin"></i></a>
+              </div>
+              <div class="team-desc">Sandeep is interested in Human-AI Collaboration for education and contributes to projects that design AI tutors supporting student learning experiences.</div>
+            </div>
+            <div class="team-spacer"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Projects (collapsible) ===== -->
+      <section class="collapsible-section" id="projectsSection" style="margin-top:28px;">
+        <div class="section-header" id="projectsHeader" role="button" tabindex="0" aria-controls="projectsContent" aria-expanded="false"><span class="title">Projects</span><span class="subtitle">Our research projects</span></div>
+
+        <div class="section-content" id="projectsContent" style="display:none;">
+          <div class="projects-grid">
+            <!-- Project 1 -->
+            <article class="project-card">
+              <img src="AI_Communication_Project.png" alt="Improving User Experience with FAICO" onerror="this.onerror=null;this.src='https://placehold.co/600x300/CCCCCC/666666?text=Project+Image';">
+              <div class="card-body">
+                <h3 class="project-title">Improving User Experience with FAICO: Towards a Framework for AI Communication in Human-AI Co-Creativity</h3>
+                <p class="project-text">
+                  This project explores how to design effective AI communication strategies for co-creative contexts to make AI a more transparent, collaborative, and trustworthy partner. 
+                  The goal is to empower users with greater understanding and control, enhancing both the quality of creative output and the user experience.
+                </p>
+                <a class="project-link" href="#" data-target="pub-faico" data-target="pub-prompting" data-target="pub-mosaaic" data-target="pub-faico" target="_blank" rel="noopener">See more</a>
+              </div>
+            </article>
+
+            <!-- Project 2 -->
+            <article class="project-card">
+              <img src="Control_Balancing_Project.png" alt="MOSAAIC" onerror="this.onerror=null;this.src='https://placehold.co/600x300/CCCCCC/666666?text=Project+Image';">
+              <div class="card-body">
+                <h3 class="project-title">MOSAAIC: Managing Optimization towards Shared Autonomy, Authority, and Initiative in Co-creation</h3>
+                <p class="project-text">
+                  This project addresses the urgent need to rethink how control is negotiated and distributed in human-AI interactions.
+                  It explores how AI systems can adjust their level of autonomy, take or yield initiative appropriately, and manage decision authority in ways that align with user intent and task context.
+                </p>
+                <a class="project-link" href="#" data-target="pub-mosaaic" data-target="pub-prompting" data-target="pub-mosaaic" data-target="pub-faico" target="_blank" rel="noopener">See more</a>
+              </div>
+            </article>
+
+            <!-- Project 3 -->
+            <article class="project-card">
+              <img src="Prompt_Engineering_Project.png" alt="Prompting AI in Co-Creation" onerror="this.onerror=null;this.src='https://placehold.co/600x300/CCCCCC/666666?text=Project+Image';">
+              <div class="card-body">
+                <h3 class="project-title">Prompting AI in Co-Creation: The Role of Syntax and Sentiment in Shaping AI-Generated Content</h3>
+                <p class="project-text">
+                  This project investigates how users craft prompts when collaborating with GenAI systems in creative tasks and how prompts impact co-creativity. 
+                  The ultimate goal is to develop a comprehensive framework that guides effective prompt writing, improves user-AI interaction, and enhances both creativity and learning.
+                </p>
+                <a class="project-link" href="#" data-target="pub-prompting" data-target="pub-prompting" data-target="pub-mosaaic" data-target="pub-faico" target="_blank" rel="noopener">See more</a>
+              </div>
+            </article>
+
+            <!-- Project 4 -->
+            <article class="project-card">
+              <img src="Edubots_Project.png" alt="OrangeBoard Educational Chatbot" onerror="this.onerror=null;this.src='https://placehold.co/600x300/CCCCCC/666666?text=Project+Image';">
+              <div class="card-body">
+                <h3 class="project-title">OrangeBoard: An Empathetic Educational Chatbot Built with Temperature</h3>
+                <p class="project-text">
+                  This project addresses the gap in emotionally intelligent educational chatbots by developing context-aware “edubots” that use conversational cues like tone and humor. 
+                  It aims to rigorously evaluate the impact of these systems on student engagement, trust, and learning outcomes.
+                </p>
+              </div>
+            </article>
+
+            <!-- Project 5 -->
+            <article class="project-card">
+              <img src="Accessibility_Project.png" alt="Accessibility of Co-Creative AI Systems" onerror="this.onerror=null;this.src='https://placehold.co/600x300/CCCCCC/666666?text=Project+Image';">
+              <div class="card-body">
+                <h3 class="project-title">The Accessibility Landscape of Co-Creative AI Systems: Analysis, Insights and Recommendations</h3>
+                <p class="project-text">
+                  This project investigates the accessibility of generative AI systems for users with disabilities, identifies accessibility violations, and offers design recommendations for more inclusive tools.
+                </p>
+                <a class="project-link" href="#" data-target="pub-accessibility" data-target="pub-prompting" data-target="pub-mosaaic" data-target="pub-faico" target="_blank" rel="noopener">See more</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+    
+      
+      
+      <!-- ===== Publications (collapsible) ===== -->
+      <section class="collapsible-section pubs-section" id="publicationsSection" style="margin-top:28px;">
+        <div class="section-header" id="publicationsHeader" role="button" tabindex="0" aria-controls="publicationsContent" aria-expanded="false"><span class="title">Publications</span><span class="subtitle">Papers & preprints</span></div>
+
+        <div class="section-content" id="publicationsContent" style="display:none;">
+          <div class="pubs-grid">
+
+            <!-- FAICO -->
+            <article class="pub-card" id="pub-faico"><h3 class="pub-title">Improving User Experience with FAICO</h3>
+              <ul class="pub-list">
+                <li>
+                  <strong>Towards a Framework for AI Communication in Human-AI Co-Creativity</strong><br>
+                  <span class="pub-meta">Rezwana, Ford · 2025 · arXiv preprint</span><div class="pub-links">
+                    <a class="pub-link" href="https://arxiv.org/abs/2504.02526" target="_blank">Read the paper</a>
+                  </div>
+                </li>
+                <li>
+                  <strong>Human-Centered AI Communication in Co-Creativity: An Initial Framework and Insights</strong><br>
+                  <span class="pub-meta">Rezwana, Ford · 2025 · arXiv preprint</span><div class="pub-links">
+                    <a class="pub-link" href="https://arxiv.org/abs/2505.18385" target="_blank">Read the paper</a>
+                  </div>
+                </li>
+              </ul>
+            </article>
+
+            <!-- MOSAAIC -->
+            <article class="pub-card" id="pub-mosaaic"><h3 class="pub-title">MOSAAIC: Shared Autonomy in Co-Creation</h3>
+              <ul class="pub-list">
+                <li>
+                  <strong>MOSAAIC Framework Paper</strong><br>
+                  <span class="pub-meta">Issak, Rezwana, Harteveld · 2025 · ICCC 2025 & arXiv</span><div class="pub-links">
+                    <a class="pub-link" href="https://arxiv.org/abs/2505.11481" target="_blank">Read the paper</a>
+                  </div>
+                </li>
+              </ul>
+            </article>
+
+            <!-- Prompting AI -->
+            <article class="pub-card" id="pub-prompting"><h3 class="pub-title">Prompting AI in Co-Creation</h3>
+              <ul class="pub-list">
+                <li>
+                  <strong>The Role of Syntax and Sentiment in Shaping AI-Generated Content</strong><br>
+                  <span class="pub-meta">Colloca, Rezwana · 2025 · ICCC 2025</span><div class="pub-links">
+                    <a class="pub-link" href="https://computationalcreativity.net/iccc25/wp-content/uploads/papers/iccc25-colloca2025prompting.pdf" target="_blank">Read the paper</a>
+                  </div>
+                </li>
+              </ul>
+            </article>
+
+            <!-- Accessibility -->
+            <article class="pub-card" id="pub-accessibility"><h3 class="pub-title">Accessibility of Co-Creative AI Systems</h3>
+              <ul class="pub-list">
+                <li>
+                  <strong>Analysis, Insights and Recommendations</strong><br>
+                  <span class="pub-meta">Preston, Rezwana · 2025 · ACM IUI Workshop (HAI-GEN)</span><div class="pub-links">
+                    <a class="pub-link" href="https://ceur-ws.org/Vol-3957/HAI-GEN-paper09.pdf" target="_blank">Read the paper</a>
+                  </div>
+                </li>
+              </ul>
+            </article>
+
+          </div>
+        </div>
+      </section>
+      <!-- ===== News (collapsible) ===== -->
+      <section class="collapsible-section" id="newsSection" style="margin-top:28px;">
+        <div class="section-header" id="newsHeader" role="button" tabindex="0" aria-controls="newsContent" aria-expanded="false"><span class="title">News</span><span class="subtitle">Updates & announcements</span></div>
+        <div class="section-content" id="newsContent" style="display:none;">
+          <div class="news-grid">
+
+            <!-- News Item 1 -->
+            <article class="news-card">
+              <img class="news-img" src="Fall_Semester_2025.jpg" alt="Fall Semester Schedule for HCC Lab" onerror="this.onerror=null;this.src='https://placehold.co/800x400/CCCCCC/666666?text=News+Image';">
+              <div class="news-body">
+                <div class="news-header-row" role="button" tabindex="0" aria-controls="news1" aria-expanded="false">
+                  <h3 class="news-title">Fall Semester Schedule for HCC Lab</h3>
+                  <div class="news-date">September 15, 2025</div>
+                </div>
+                <div class="news-desc" id="news1">
+                  <p class="news-text">The Human-Centered Computing Lab is excited to announce the start of the fall semester! We look forward to another productive and innovative semester of research. The lab meets every Monday at 5 PM in YR459.</p>
+                </div>
+              </div>
+            </article>
+
+            <!-- News Item 2 -->
+            <article class="news-card">
+              <img class="news-img" src="ICCC_Conference_2025.png" alt="ICCC 2025 Paper Acceptance" onerror="this.onerror=null;this.src='https://placehold.co/800x400/CCCCCC/666666?text=News+Image';">
+              <div class="news-body">
+                <div class="news-header-row" role="button" tabindex="0" aria-controls="news2" aria-expanded="false">
+                  <h3 class="news-title">Paper Accepted to ICCC 2025</h3>
+                  <div class="news-date">July 2025</div>
+                </div>
+                <div class="news-desc" id="news2">
+                  <p class="news-text">Our paper, 'Prompting AI in Co-Creation: The Role of Syntax and Sentiment in Shaping AI-Generated Content,' was accepted to the 16th International Conference on Computational Creativity (ICCC 2025) and presented in person by Giancarlo Colloca, a Ph.D. student in the HCC Lab, in Campinas, Brazil. In this study, we analyzed how users’ prompting styles—particularly their syntax and sentiment—affect ChatGPT’s storytelling behavior in co-creative contexts.</p>
+                </div>
+              </div>
+            </article>
+
+            <!-- News Item 3 -->
+            <article class="news-card">
+              <img class="news-img" src="Lab_Social_Spring_2025.jpg" alt="HCC Lab Social: Spring 2025" onerror="this.onerror=null;this.src='https://placehold.co/800x400/CCCCCC/666666?text=News+Image';">
+              <div class="news-body">
+                <div class="news-header-row" role="button" tabindex="0" aria-controls="news3" aria-expanded="false">
+                  <h3 class="news-title">HCC Lab Social: Spring 2025</h3>
+                  <div class="news-date">May 2025</div>
+                </div>
+                <div class="news-desc" id="news3">
+                  <p class="news-text">A great end to the last lab of the semester! Our team gathered for a delightful social event, marking the culmination of a productive academic year. It was a wonderful opportunity to unwind, connect, and celebrate our collective achievements. The evening was filled with laughter, delicious food, engaging games, and lively conversations, fostering an even stronger sense of community among researchers. We're incredibly proud of the hard work and dedication shown by everyone this semester, and we look forward to carrying this energy into our future endeavors.</p>
+                </div>
+              </div>
+            </article>
+
+            <!-- News Item 4 -->
+            <article class="news-card">
+              <img class="news-img" src="IUI_Conference_2025.png" alt="IUI Workshop on Human-AI Co-Creation" onerror="this.onerror=null;this.src='https://placehold.co/800x400/CCCCCC/666666?text=News+Image';">
+              <div class="news-body">
+                <div class="news-header-row" role="button" tabindex="0" aria-controls="news4" aria-expanded="false">
+                  <h3 class="news-title">Paper Accepted to IUI Workshop on Human-AI Co-Creation</h3>
+                  <div class="news-date">April 2025</div>
+                </div>
+                <div class="news-desc" id="news4">
+                  <p class="news-text">Our paper, 'The Accessibility Landscape of Co-Creative AI Systems: Analysis, Insights, and Recommendations,' has been accepted to the 6th IUI Workshop on Human-AI Co-Creation with Generative Models 2025. In this paper, we analyze the accessibility features of 26 co-creative AI systems, uncovering common accessibility challenges and offering strategies for developing more inclusive and humane AI systems for co-creation. Makenzie Preston, an undergraduate researcher of the HCC lab at the time, proudly represented the lab by presenting the paper at the conference held in Cagliari, Italy.</p>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
 </section>
-</section>
-<!-- About Page Section -->
-<section class="page-section max-w-4xl mx-auto" id="about-page">
-<h1 class="text-5xl font-extrabold text-gray-900 mb-12 text-center" id="about-title"></h1>
-<section class="bg-white p-10 rounded-2xl shadow-xl mb-12">
-<h2 class="text-3xl font-bold text-gray-800 mb-4">Our Mission</h2>
-<p class="text-gray-700 leading-relaxed" id="about-mission"></p>
-</section>
-<section class="bg-white p-10 rounded-2xl shadow-xl mb-12">
-<h2 class="text-3xl font-bold text-gray-800 mb-4" id="research-focus-title"></h2>
-<ul class="list-disc list-inside text-gray-700 space-y-2" id="research-focus-list">
-<!-- Points will be injected here by JS -->
-</ul>
-</section>
-<!-- What is Human Centered Computing? -->
-<section class="bg-white p-10 rounded-2xl shadow-xl mb-12">
-<h2 class="text-3xl font-bold text-gray-800 mb-4" id="hcc-definition-title"></h2>
-<p class="text-gray-700 leading-relaxed" id="hcc-definition-content"></p>
-</section>
-<!-- Why does it matter? -->
-<section class="bg-white p-10 rounded-2xl shadow-xl">
-<h2 class="text-3xl font-bold text-gray-800 mb-4" id="why-it-matters-title"></h2>
-<ul class="list-disc list-inside text-gray-700 space-y-2" id="why-it-matters-list">
-<!-- Points will be injected here by JS -->
-</ul>
-</section>
-</section>
-<!-- Team Page Section -->
-<section class="page-section max-w-6xl mx-auto" id="team-page">
-<h1 class="text-5xl font-extrabold text-gray-900 mb-12 text-center" id="team-title"></h1>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 items-start" id="team-members-grid">
-<!-- Team members will be injected here by JS -->
-</div>
-</section>
-<!-- Projects Page Section -->
-<section class="page-section max-w-6xl mx-auto" id="projects-page">
-<h1 class="text-5xl font-extrabold text-gray-900 mb-12 text-center" id="projects-title"></h1>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-10" id="projects-grid">
-<!-- Project cards will be injected here by JS -->
-</div>
-</section>
-<!-- News Page Section -->
-<section class="page-section max-w-4xl mx-auto" id="news-page">
-<h1 class="text-5xl font-extrabold text-gray-900 mb-12 text-center" id="news-title"></h1>
-<div class="space-y-10" id="news-container">
-<!-- News items will be dynamically injected here -->
-</div>
-<p class="text-xl text-gray-700 bg-white p-8 rounded-2xl shadow-xl mt-12 text-center" id="news-placeholder-content"></p>
-</section>
-<!-- FAQ Page Section -->
-<section class="page-section max-w-4xl mx-auto" id="faq-page">
-<h1 class="text-5xl font-extrabold text-gray-900 mb-12 text-center" id="faq-title"></h1>
-<div class="space-y-6" id="faq-items-container">
-<!-- FAQ items will be injected here by JS -->
-</div>
-</section>
-</main>
-<!-- Pre-Footer Section Navigation -->
-<section class="bg-gray-900 text-white py-10 hidden" id="prefooter-nav">
-<div class="max-w-7xl mx-auto px-6 space-y-4" id="prefooter-rows"></div>
-</section>
-<!-- Footer -->
-<!-- Footer -->
-<!-- Footer -->
-<footer class="bg-black text-white py-20 md:py-24 px-6">
-<div class="max-w-7xl mx-auto">
-<div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
-<!-- Left: copy + meta -->
-<div>
-<h2 class="text-5xl md:text-6xl font-extrabold leading-tight mb-6">Contact</h2>
-<p class="text-gray-300 text-lg leading-relaxed mb-4">
+
+
+
+    <!-- ===== SCRIPT ===== -->
+    <script>
+      // Side images scroll effect
+      window.addEventListener("scroll", () => {
+        const y = window.scrollY;
+        const move = y * 0.2;
+        const left = document.getElementById("imgLeft");
+        const right = document.getElementById("imgRight");
+        if(left) left.style.transform = `translateX(${-move}px)`;
+        if(right) right.style.transform = `translateX(${move}px)`;
+      });
+
+      // Scroll to About section
+      const scrollBtn = document.getElementById("scrollToAbout");
+      if (scrollBtn) {
+        scrollBtn.addEventListener("click", () => {
+          document.getElementById("aboutSection").scrollIntoView({ behavior: "smooth" });
+          document.getElementById("aboutContent").style.display = "block";
+        });
+      }
+
+      // Toggle helper
+      function makeCollapsible(headerId, contentId){
+        const h = document.getElementById(headerId);
+        const c = document.getElementById(contentId);
+        if(!h || !c) return;
+        const toggle = () => {
+          const open = c.style.display === "block";
+          c.style.display = open ? "none" : "block";
+          h.setAttribute("aria-expanded", String(!open));
+        };
+        h.addEventListener("click", toggle);
+        h.addEventListener("keydown", (e)=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); toggle(); }});
+      }
+      makeCollapsible("aboutHeader", "aboutContent");
+      makeCollapsible("teamHeader", "teamContent");
+      makeCollapsible("projectsHeader", "projectsContent");
+      makeCollapsible("publicationsHeader","publicationsContent");
+
+
+      // Toggle team card desc
+      const teamContent = document.getElementById("teamContent");
+      if (teamContent) {
+        teamContent.addEventListener("click", (e) => {
+          const card = e.target.closest(".team-card");
+          if (!card) return;
+          if (e.target.closest("a")) return;
+          const desc = card.querySelector(".team-desc");
+          if (!desc) return;
+          const show = desc.style.display === "none" || desc.style.display === "";
+          desc.style.display = show ? "block" : "none";
+        });
+      }
+    
+      // Collapse/expand the whole News section
+      if (typeof makeCollapsible === 'function') {
+        makeCollapsible("newsHeader","newsContent");
+      }
+      // Make each News card's description collapsible
+      (function makeNewsCollapsible(){
+        document.querySelectorAll(".news-header-row").forEach((header) => {
+          const content = header.parentElement.querySelector(".news-desc");
+          if (!content) return;
+          const toggle = () => {
+            const open = content.style.display === "block";
+            content.style.display = open ? "none" : "block";
+            header.setAttribute("aria-expanded", String(!open));
+          };
+          header.addEventListener("click", toggle);
+          header.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+          });
+        });
+      })();
+
+    
+    // Make news images clickable to toggle their card descriptions
+    (function makeNewsImageToggle(){
+      document.querySelectorAll(".news-card .news-img").forEach((img) => {
+        img.style.cursor = "pointer";
+        img.addEventListener("click", () => {
+          const card = img.closest(".news-card");
+          if (!card) return;
+          const header = card.querySelector(".news-header-row");
+          const content = card.querySelector(".news-desc");
+          if (!content) return;
+          const open = content.style.display === "block";
+          content.style.display = open ? "none" : "block";
+          if (header) header.setAttribute("aria-expanded", String(!open));
+        });
+      });
+    })();
+
+  
+    // Projects -> Publications linking (collapse open & scroll)
+    (function(){
+      document.querySelectorAll(".project-link[data-target]").forEach(function(btn){
+        btn.addEventListener("click", function(e){
+          e.preventDefault();
+          var targetId = btn.getAttribute("data-target");
+          var pubsContent = document.getElementById("publicationsContent");
+          var pubsHeader = document.getElementById("publicationsHeader");
+          if (pubsContent && pubsContent.style.display !== "block") {
+            pubsContent.style.display = "block";
+            if (pubsHeader) pubsHeader.setAttribute("aria-expanded","true");
+          }
+          var card = document.getElementById(targetId);
+          if (card){
+            card.scrollIntoView({behavior:"smooth", block:"start"});
+            var oldBox = card.style.boxShadow;
+            card.style.boxShadow = "0 0 0 3px #ffbb00";
+            setTimeout(function(){ card.style.boxShadow = oldBox; }, 1800);
+          }
+        });
+      });
+    })();
+
+  </script>
+
+  <!-- ===== Footer (modern) ===== -->
+  <footer class="footer">
+    <div class="footer-container">
+      <!-- Left: copy + meta -->
+      <div>
+        <h2>Contact</h2>
+        <p class="muted" style="font-size:18px;">
           Our lab is located at Towson University. Motivated candidates can contact our members
           to apply for internships and research positions.
         </p>
-<p class="text-gray-400 text-base leading-relaxed mb-8">
+        <p class="muted2" style="font-size:16px;">
           Unauthorized visitors are not permitted in the lab.
         </p>
-<ul class="space-y-5 text-lg"><li class="flex items-start">
-<span class="text-2xl leading-none text-orange-500 mr-3">📍</span>
-<span id="footer-contact-address">459 YR Building, Towson University, Towson, MD 21252</span>
-</li>
-<li class="flex items-start">
-<span class="text-2xl leading-none text-orange-500 mr-3">⏰</span>
-<span id="footer-hours">Monday 5:00 PM to 6:00 PM</span>
-</li>
-<li class="flex items-start">
-<span class="text-2xl leading-none text-orange-500 mr-3">✉️</span>
-<a class="hover:underline" href="#" id="footer-contact-email">jrezwana@towson.edu</a>
-</li>
-<li class="flex items-start">
-  <span class="text-2xl leading-none text-orange-500 mr-3">🏛️</span>
-  <a class="hover:underline" href="https://www.towson.edu" rel="noopener noreferrer" target="_blank">Towson University</a>
-</li>
-</ul>
-<p class="text-sm text-gray-400 mt-8">© <span id="current-year"></span> Human-Centered Computing Lab. All rights reserved.</p>
-
-</div>
-<!-- Right: map -->
-<div>
-<div class="rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10">
-<iframe allowfullscreen="" height="450" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2374.0819890750504!2d-76.60929467225354!3d39.390662236845756!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c80fa2cf86a6a9%3A0x36774b98ccc72a6d!2s7800%20York%20Rd%2C%20Towson%2C%20MD%2021252!5e1!3m2!1sen!2sus!4v1758401573261!5m2!1sen!2sus" style="border:0;" width="100%"></iframe>
-</div>
-</div>
-<link crossorigin="" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" rel="stylesheet"/>
-<script crossorigin="" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-  (function() {
-    var lat = 39.39064, lng = -76.60593; // YR Building, 7800 York Rd
-    var map = L.map('hcc-map', { scrollWheelZoom: false }).setView([lat, lng], 19);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 20,
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-    var marker = L.marker([lat, lng]).addTo(map);
-    marker.bindPopup('<strong>HCC Lab — YR 433</strong><br/>YR Building, 7800 York Rd').openPopup();
-    marker.bindTooltip('HCC Lab — YR 433', {permanent: true, direction: 'top', offset: [0, -12]});
-  })();
-</script>
-</div>
-
-</footer>
-<!-- JavaScript Logic -->
-<script>
-        
-// === Split title scroll animation ===
-function initSplitTitleScroll() {
-  const hero = document.getElementById('lucid-hero');
-  const container = document.getElementById('splitTitle');
-  if (!hero || !container) return;
-
-  const words = [...container.querySelectorAll('.word')];
-
-  // Configuration (tweak to taste)
-  const maxShiftPerIndex = 28;   // px added per letter index
-  const baseShift = 24;          // px base shift for the first letter
-  const dampAtRest = 0.00001;    // keeps GPU layer active
-
-  // Ease-out cubic
-  const ease = t => 1 - Math.pow(1 - t, 3);
-
-  let ticking = false;
-  const onScroll = () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => {
-      const rect = hero.getBoundingClientRect();
-      const vh = window.innerHeight || document.documentElement.clientHeight;
-
-      // Start when ~15% from top; finish after passing by 35% of its height
-      const start = vh * 0.15;
-      const end = -rect.height * 0.35;
-      const raw = (start - rect.top) / (start - end);
-      const clamped = Math.max(0, Math.min(1, raw));
-      const p = ease(clamped);
-
-      // Apply transforms letter-by-letter
-      words.forEach(word => {
-        const dir = Number(word.getAttribute('data-dir')) || 1;
-        const chars = [...word.querySelectorAll('.char')];
-        chars.forEach((ch, i) => {
-          const shift = (baseShift + i * maxShiftPerIndex) * p * dir;
-          ch.style.transform = `translateX(${shift.toFixed(3)}px)` + (p ? '' : ` translateZ(0)`);
-        });
-      });
-
-      // Optional: tighten overall letter-spacing slightly as they move
-      
-
-      ticking = false;
-    });
-  };
-
-  ['scroll', 'resize'].forEach(evt => window.addEventListener(evt, onScroll, { passive: true }));
-  onScroll();
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-            const pageSections = document.querySelectorAll('.page-section');
-            const navButtons = document.querySelectorAll('nav button');
-            let activePageId = 'home-page'; // Default active page
-
-            // Website Content Data
-            const websiteContent = {
-                home: {
-                    title: "Human-Centered Computing Lab",
-                    slogan: "WELCOME TO RESEARCH THAT PUTS HUMANS FIRST!",
-                    mission: "WE ARE A RESEARCH LAB DEDICATED TO HUMAN-CENTERED COMPUTING-WHERE TECHNOLOGY IS DESIGNED WITH AND FOR PEOPLE.",
-                    groupPhoto: "Group_pic_crop.jpg",
-                    universityLogo: "Tu_LOGO.png",
-                    aboutSummary: {
-                        title: "About Our Lab",
-                        mission: "Our mission is to design transparent, trustworthy, ethical, inclusive, and human-centered computing systems.",
-                        researchFocus: {
-                            title: "Our research focuses on:",
-                            points: [
-                                "Human-AI co-creation",
-                                "Human-AI interaction",
-                                "Explainable and ethical AI",
-                                "Accessibility and inclusivity",
-                                "Trust and transparency in computing"
-                            ]
-                        }
-                    },
-                },
-                about: {
-                    title: "About Us",
-                    mission: "Our mission is to design transparent, trustworthy, ethical, inclusive, and human-centered computing systems.",
-                    researchFocus: {
-                        title: "Our research focuses on:",
-                        points: [
-                            "Human-AI co-creation",
-                            "Human-AI interaction",
-                            "Explainable and ethical AI",
-                            "Accessibility and inclusivity",
-                            "Trust and transparency in computing"
-                        ]
-                    },
-                    hccDefinition: {
-                        title: "What is Human Centered Computing?",
-                        definition: "Human-Centered Computing (HCC) is an interdisciplinary field that focuses on designing, developing, and evaluating technology that prioritizes human needs, experiences, capabilities, values, and social contexts."
-                    },
-                    whyItMatters: {
-                        title: "Why does it matter?",
-                        points: [
-                            "Enhances user experience, users' skill and creativity.",
-                            "Ensures ethical and responsible technology development.",
-                            "Bridges the gap between humans and complex computing systems.",
-                            "Drives innovation by integrating human needs into technology design."
-                        ]
-                    }
-                },
-                team: {
-                    title: "Meet the people behind the research.",
-                    members: [
-    { placeholder: true },
-    {
-        name: "DR JEBA REZWANA",
-        role: "HCC LAB DIRECTOR",
-        research: "My research interests focus on Human-Computer Interaction in the subfields of Human-AI Co-Creation, Interaction Design, Ethical Human-Centered AI, along with AI for CS Education.",
-        image: "Jeba.png"
-    ,
-        scholar: "#",
-        linkedin: "#"
-    ,
-        website: "#"
-    },
-    { placeholder: true },
-    {
-        name: "KATELYN LEEDY",
-        role: "PHD STUDENT",
-        research: "Katelyn's research explores user experience design in educational technology, aiming to create intuitive and engaging learning platforms.",
-        image: "Katelyn.jpg"
-    ,
-        scholar: "#",
-        linkedin: "#"
-    ,
-        website: "#"
-    },
-    {
-        name: "MACKENZIE PRESTON",
-        role: "MASTERS STUDENT",
-        research: "Mackenzie focuses on ethical AI frameworks, ensuring that new technologies are developed and deployed responsibly, with a strong emphasis on user trust and privacy.",
-        image: "Mackenzie.jpg"
-    ,
-        scholar: "#",
-        linkedin: "#"
-    ,
-        website: "#"
-    },
-    {
-        name: "GIANCARLO COLLOCA",
-        role: "PHD STUDENT",
-        research: "Giancarlo's work delves into human-AI interaction, investigating how to foster seamless collaboration and communication between humans and autonomous systems in various environments.",
-        image: "Giancarlo.png"
-    ,
-        scholar: "#",
-        linkedin: "#"
-    ,
-        website: "#"
-    },
-    {
-        name: "AYON MAZUMDER",
-        role: "PHD STUDENT",
-        research: "Ayon's research focuses on User Mental Models, Co-Creative AI systems, and designing interactive systems that enhance human-AI collaboration.",
-        image: "Ayon.jpg"
-    ,
-        scholar: "#",
-        linkedin: "#"
-    ,
-        website: "#"
-    },
-    {
-        name: "NEHA SANJAY SAVALGI",
-        role: "MASTERS STUDENT",
-        research: "Neha provides crucial support in research data analysis and experimental setup, contributing to the empirical validation of our human-centered design principles.",
-        image: "Neha.jpg"
-    ,
-        scholar: "#",
-        linkedin: "#"
-    ,
-        website: "#"
-    },
-    {
-        name: "HAOTONG ZHU",
-        role: "MASTERS GRADUATE",
-        research: "Haotong’s graduate research focused on the effectiveness of explainable AI interfaces in improving user comprehension and trust in complex AI-driven decision-making systems.",
-        image: "Haotong.jpg"
-    ,
-        scholar: "#",
-        linkedin: "#"
-    ,
-        website: "#"
-    },
-    {
-        name: "SANDEEP NIRMALRAJ",
-        role: "RESEARCH ASSISTANT",
-        research: "Sandeep's research focuses on the development of educational AI assistants that help students by integrating humor and anthropomorphic traits to enhance their learning experience.",
-        image: "Sandeep.jpg"
-    ,
-        scholar: "#",
-        linkedin: "#"
-    ,
-        website: "#"
-    },
-]
-                },
-                projects: {
-                    title: "Our Research Projects",
-                    list: [
-                        {
-                            id: "project1",
-                            title: "Improving User Experience with FAICO: Towards a Framework for AI Communication in Human-AI Co-Creativity",
-                            summary: "This project explores how to design effective AI communication strategies for co-creative contexts to make AI a more transparent, collaborative, and trustworthy partner.",
-                            goal: "The goal is to empower users with greater understanding and control, enhancing both the quality of creative output and the user experience.",
-                            image: "AI_Communication_Project.png",
-                            paperLink: "https://dl.acm.org/doi/abs/10.1145/3706599.3719858"
-                        },
-                        {
-                            id: "project2",
-                            title: "MOSAAIC: Managing Optimization towards Shared Autonomy, Authority, and Initiative in Co-creation",
-                            summary: "This project addresses the urgent need to rethink how control is negotiated and distributed in human-AI interactions.",
-                            focus: "It explores how AI systems can adjust their level of autonomy, take or yield initiative appropriately, and manage decision authority in ways that align with user intent and task context.",
-                            image: "Control_Balancing_Project.png",
-                            paperLink: "https://arxiv.org/abs/2505.11481"
-                        },
-                        {
-                            id: "project3",
-                            title: "Prompting AI in Co-Creation: The Role of Syntax and Sentiment in Shaping AI-Generated Content",
-                            summary: "This project investigates how users craft prompts when collaborating with GenAI systems in creative tasks and how prompts impact co-creativity.",
-                            goal: "The ultimate goal is to develop a comprehensive framework that guides effective prompt writing, improves user-AI interaction, and enhances both creativity and learning.",
-                            image: "Prompt_Engineering_Project.png",
-                            paperLink: "https://computationalcreativity.net/iccc25/wp-content/uploads/papers/iccc25-colloca2025prompting.pdf"
-                        },
-                        {
-                            id: "project4",
-                            title: "OrangeBoard: An Empathetic Educational Chatbot Built with Temperature",
-                            summary: "This project addresses the gap in emotionally intelligent educational chatbots by developing context-aware 'edubots' that use conversational cues like tone and humor.",
-                            aim: "It aims to rigorously evaluate the impact of these systems on student engagement, trust, and learning outcomes.",
-                            image: "Edubots_Project.png",
-                            paperLink: "#"
-                        },
-                        {
-                            id: "project5",
-                            title: "The Accessibility Landscape of Co-Creative AI Systems: Analysis, Insights and Recommendations",
-                            summary: "This project investigates the accessibility of generative AI systems for users with disabilities, identifies accessibility violations, and offers design recommendations for more inclusive tools.",
-                            image: "Accessibility_Project.png",
-                            paperLink: "https://hai-gen.github.io/2025/papers/P9-HAI-GEN-2025%20Preston%20and%20Rezwana.pdf"
-                        }
-                    ]
-                },
-                news: {
-                    title: "Latest News",
-                    items: [
-                        {
-                            title: "Fall Semester Schedule for HCC Lab",
-                            date: "September 15, 2025",
-                            content: 'The Human-Centered Computing Lab is excited to announce the start of the fall semester! We meet every Monday at 5 PM in YR459. <br><br><a href="https://docs.google.com/document/d/1C-c5atpjDjAz5co12WMt7FrDWxRf987RJGZa8uKD2KU/edit?usp=sharing" target="_blank"><button style="padding: 8px 16px; background-color: #00529B; color: white; border: none; border-radius: 5px; cursor: pointer;">Click here to view the Fall Schedule</button></a>',
-
-                            image: "Fall_Semester_2025.jpg"
-                        },
-
-                        {
-                            title: "Paper Accepted to International Conference on Computational Creativity",
-                            date: "July 2025",
-                            content: "Our paper, 'Prompting AI in Co-Creation: The Role of Syntax and Sentiment in Shaping AI-Generated Content,' was accepted to the 16th International Conference on Computational Creativity (ICCC 2025) and presented in person by Giancarlo Colloca, a Ph.D. student in the HCC Lab, in Campinas, Brazil. In this study, we analyzed how users’ prompting styles—particularly their syntax and sentiment—affect ChatGPT’s storytelling behavior in co-creative contexts.",
-                            image: "ICCC_Conference_2025.png"
-                        },
-                        {
-                            title: "HCC Lab Social: Spring 2025",
-                            date: "May 2025",
-                            content: "A great end to the last lab of the semester! Our team gathered for a delightful social event, marking the culmination of a productive academic year. It was a wonderful opportunity to unwind, connect, and celebrate our collective achievements. The evening was filled with laughter, delicious food, engaging games, and lively conversations, fostering an even stronger sense of community among researchers. We're incredibly proud of the hard work and dedication shown by everyone this semester, and we look forward to carrying this energy into our future endeavors.",
-                            image: "Lab_Social_Spring_2025.jpg"
-                        },
-                                            {
-                            title: "Paper Accepted to IUI Workshop on Human-AI Co-Creation",
-                            date: "April 2025",
-                            content: "Our paper, 'The Accessibility Landscape of Co-Creative AI Systems: Analysis, Insights, and Recommendations,' has been accepted to the 6th IUI Workshop on Human-AI Co-Creation with Generative Models 2025. In this paper, we analyze the accessibility features of 26 co-creative AI systems, uncovering common accessibility challenges and offering strategies for developing more inclusive and humane AI systems for co-creation. Makenzie Preston, an undergraduate researcher of the HCC lab at the time, proudly represented the lab by presenting the paper at the conference held in Cagliari, Italy.",
-                            image: "IUI_Conference_2025.png"
-                        }                    ],
-                    placeholder: "Stay tuned for more exciting updates from the HCC Lab!"
-                },
-                faq: {
-                    title: "Frequently Asked Questions",
-                    items: [
-                        {
-                            question: "What is Human-Centered Computing (HCC)?",
-                            answer: "Human-Centered Computing is an interdisciplinary field focused on the design, development, and evaluation of technology that prioritizes human needs, experiences, and well-being. It aims to create intuitive, effective, and ethical computing systems."
-                        },
-                        {
-                            question: "How can I join the HCC Lab at Towson University?",
-                            answer: "Prospective students (undergraduate and graduate) interested in research opportunities can reach out to Dr. Jeba Rezwana, the HCC Lab Director, via email. Please include your resume, academic interests, and why you are interested in HCC research."
-                        },
-                        {
-                            question: "What kind of projects does the HCC Lab work on?",
-                            answer: "Our lab engages in diverse projects, including human-AI co-creation, ethical AI design, accessibility in generative AI, and human-AI interaction in educational contexts. You can find more details on our 'Projects' page."
-                        },
-                        {
-                            question: "Are there opportunities for undergraduate students?",
-                            answer: "Yes, we encourage passionate undergraduate students to get involved! Opportunities may include assisting with ongoing research, data collection, literature reviews, and participating in lab meetings. Please contact the lab director for availability."
-                        },
-                        {
-                            question: "Where is the HCC Lab located?",
-                            answer: "The HCC Lab is part of Towson University. Specific lab room numbers and building details can be provided upon direct inquiry."
-                        }
-                    ]
-                },
-                contact: {
-                    address: "459 YR Building, Towson University, Towson, MD 21252",
-                    email: "jrezwana@towson.edu",
-                    phone: ""
-                }
-            };
-
-            // Function to render a specific page
-            function renderPage(pageId) {
-                pageSections.forEach(section => {
-                    section.classList.remove('active');
-                });
-                navButtons.forEach(button => {
-                    button.classList.remove('active', 'text-gray-100');
-                    button.classList.add('text-gray-400');
-                });
-
-                const targetPage = document.getElementById(pageId);
-                if (targetPage) {
-                    targetPage.classList.add('active');
-                    activePageId = pageId;
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                // Toggle prefooter previews: only visible on HOME
-                const prefooter = document.getElementById('prefooter-nav');
-                if (prefooter) {
-                    if (pageId === 'home-page') {
-                        prefooter.classList.remove('hidden');
-                    } else {
-                        prefooter.classList.add('hidden');
-                    }
-                }
-
-                }
-
-                const navButtonId = `nav-${pageId.split('-')[0]}`;
-                const activeNavButton = document.getElementById(navButtonId);
-                if (activeNavButton) {
-                    activeNavButton.classList.add('active', 'text-gray-100');
-                    activeNavButton.classList.remove('text-gray-400');
-                }
-            }
-
-            // Function to populate content on the Home page
-            function populateHomePage() {
-                document.querySelector('#home-page h1').textContent = websiteContent.home.title;
-                document.querySelector('#home-page p:nth-of-type(1)').textContent = websiteContent.home.slogan;
-                document.querySelector('#home-page p:nth-of-type(2)').textContent = websiteContent.home.mission;
-                document.getElementById('university-logo').src = websiteContent.home.universityLogo;
-                document.getElementById('group-photo').src = websiteContent.home.groupPhoto;
-
-                document.getElementById('home-about-summary-title').textContent = websiteContent.home.aboutSummary.title;
-                document.getElementById('home-about-summary-mission').textContent = websiteContent.home.aboutSummary.mission;
-                document.getElementById('home-about-summary-focus-title').textContent = websiteContent.home.aboutSummary.researchFocus.title;
-                const homeAboutFocusList = document.getElementById('home-about-summary-focus-list');
-                homeAboutFocusList.innerHTML = '';
-                websiteContent.home.aboutSummary.researchFocus.points.forEach(point => {
-                    const li = document.createElement('li');
-                    li.textContent = point;
-                    homeAboutFocusList.appendChild(li);
-                });
-                document.getElementById('home-about-link').addEventListener('click', (e) => {
-                    e.preventDefault();
-                    renderPage('about-page');
-                });
-            }
-
-            // Function to populate content on the About page
-            function populateAboutPage() {
-                document.getElementById('about-title').textContent = websiteContent.about.title;
-                document.getElementById('about-mission').textContent = websiteContent.about.mission;
-
-                document.getElementById('research-focus-title').textContent = websiteContent.about.researchFocus.title;
-                const researchFocusList = document.getElementById('research-focus-list');
-                researchFocusList.innerHTML = '';
-                websiteContent.about.researchFocus.points.forEach(point => {
-                    const li = document.createElement('li');
-                    li.textContent = point;
-                    researchFocusList.appendChild(li);
-                });
-
-                document.getElementById('hcc-definition-title').textContent = websiteContent.about.hccDefinition.title;
-                document.getElementById('hcc-definition-content').textContent = websiteContent.about.hccDefinition.definition;
-
-                document.getElementById('why-it-matters-title').textContent = websiteContent.about.whyItMatters.title;
-                const whyItMattersList = document.getElementById('why-it-matters-list');
-                whyItMattersList.innerHTML = '';
-                websiteContent.about.whyItMatters.points.forEach(point => {
-                    const li = document.createElement('li');
-                    li.textContent = point;
-                    whyItMattersList.appendChild(li);
-                });
-            }
-
-            // Function to populate content on the Team page
-            function populateTeamPage() {
-                document.getElementById('team-title').textContent = websiteContent.team.title;
-                const teamMembersGrid = document.getElementById('team-members-grid');
-                teamMembersGrid.innerHTML = '';
-
-                websiteContent.team.members.forEach(member => {
-                    const memberDiv = document.createElement('div');
-                    memberDiv.className = 'self-start bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 text-center';
-                    memberDiv.innerHTML = `
-                        <img src="${member.image}" alt="${member.name}" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover border-4 border-gray-200" onerror="this.onerror=null;this.src='https://placehold.co/150x150/CCCCCC/666666?text=Profile';">
-                        <h3 class="text-xl font-bold text-gray-900 mb-1">${member.name}</h3>
-                        <p class="text-gray-600 font-medium">${member.role}</p>
-                        <div class="flex justify-center gap-6 mt-3">
-                            ${member.website ? `<a href="${member.website}" target="_blank" aria-label="Website" class="text-gray-500 hover:text-blue-600 transition" rel="noopener noreferrer">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6">
-                                  <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 2c1.7 0 3.3.5 4.6 1.5l-2 2A6 6 0 006 12c0 1.3.4 2.5 1.2 3.5l-2 2A8 8 0 0112 4zm0 16c-1.7 0-3.3-.5-4.6-1.5l2-2A6 6 0 0018 12c0-1.3-.4-2.5-1.2-3.5l2-2A8 8 0 0112 20z"/>
-                                </svg>
-                            </a>` : ""}
-                            ${member.scholar ? `<a href="${member.scholar}" target="_blank" aria-label="Google Scholar" class="text-gray-500 hover:text-blue-600 transition" rel="noopener noreferrer">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="currentColor" class="w-6 h-6">
-                                  <path d="M24 6L4 18l20 12 20-12L24 6zm-6 23.2v6.3c0 1 .5 1.9 1.4 2.4l3.8 2.2c.5.3 1.2.3 1.7 0l3.8-2.2c.9-.5 1.4-1.4 1.4-2.4v-6.3l-6.9 4.1c-.8.5-1.9.5-2.7 0L18 29.2z"/>
-                                </svg>
-                            </a>` : ""}
-                            ${member.linkedin ? `<a href="${member.linkedin}" target="_blank" aria-label="LinkedIn" class="text-gray-500 hover:text-blue-600 transition" rel="noopener noreferrer">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                                  <path d="M20.451 20.451h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.447-2.136 2.942v5.664H9.354V9h3.414v1.561h.049c.476-.9 1.637-1.852 3.37-1.852 3.604 0 4.27 2.372 4.27 5.457v6.285zM5.337 7.433a2.064 2.064 0 110-4.128 2.064 2.064 0 010 4.128zM7.114 20.451H3.56V9h3.554v11.451z"/>
-                                </svg>
-                            </a>` : ""}
-                        </div>
-                        <div class="member-desc mt-4 text-gray-700 text-sm leading-relaxed hidden">
-                            ${member.research}
-                        </div>
-                    `;
-                    
-
-                    // Make card collapsible: toggle description on click (ignore clicks on links)
-                    const descEl = memberDiv.querySelector('.member-desc');
-                    memberDiv.classList.add('cursor-pointer');
-                    memberDiv.setAttribute('role', 'button');
-                    memberDiv.setAttribute('aria-expanded', 'false');
-                    memberDiv.addEventListener('click', (ev) => {
-                        if (ev.target.closest('a')) return; // let icon links work normally
-                        const isHidden = descEl.classList.toggle('hidden');
-                        memberDiv.setAttribute('aria-expanded', String(!isHidden));
-                    });
-if (member.placeholder) {
-    const placeholderDiv = document.createElement('div');
-    placeholderDiv.className = 'invisible';
-    teamMembersGrid.appendChild(placeholderDiv);
-} else {
-    teamMembersGrid.appendChild(memberDiv);
-}
-
-                });
-            }
-
-            // Function to populate content on the Projects page
-            function populateProjectsPage() {
-                document.getElementById('projects-title').textContent = websiteContent.projects.title;
-                const projectsGrid = document.getElementById('projects-grid');
-                projectsGrid.innerHTML = '';
-
-                websiteContent.projects.list.forEach(project => {
-                    const projectCard = document.createElement('div');
-                    projectCard.className = 'project-card bg-white p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col';
-                    projectCard.innerHTML = `
-                        <img src="${project.image}" alt="${project.title}" class="w-full h-48 object-cover rounded-t-xl mb-4" onerror="this.onerror=null;this.src='https://placehold.co/600x300/CCCCCC/666666?text=Project+Image';">
-                        <div class="card-content flex flex-col justify-between">
-                            <div>
-                                <h3 class="text-2xl font-bold text-gray-900 mb-2">${project.title}</h3>
-                                <p class="text-gray-700 mb-4 text-base leading-relaxed">
-                                    ${project.summary} ${project.goal || project.focus || project.aim || ''}
-                                </p>
-                            </div>
-                            <a href="${project.paperLink}" target="_blank" rel="noopener noreferrer" class="self-start mt-4 inline-block bg-blue-600 text-white font-semibold py-3 px-8 rounded-full hover:bg-blue-700 transition-colors duration-200 shadow-lg transform hover:scale-105">
-                                Read the Paper
-                            </a>
-                        </div>
-                    `;
-                    projectsGrid.appendChild(projectCard);
-                });
-            }
-
-            // Function to populate content on the News page
-            function populateNewsPage() {
-                document.getElementById('news-title').textContent = websiteContent.news.title;
-                const newsContainer = document.getElementById('news-container');
-                newsContainer.innerHTML = '';
-
-                websiteContent.news.items.forEach(newsItem => {
-                    const newsItemDiv = document.createElement('div');
-                    newsItemDiv.className = 'bg-white p-8 rounded-2xl shadow-xl';
-                    newsItemDiv.innerHTML = `
-                        <h2 class="text-3xl font-bold text-gray-900 mb-2">${newsItem.title}</h2>
-                        <p class="text-gray-500 text-sm mb-4">${newsItem.date}</p>
-                        <img src="${newsItem.image}" alt="${newsItem.title}" class="w-full h-64 object-cover rounded-xl mb-4" onerror="this.onerror=null;this.src='https://placehold.co/700x350/CCCCCC/666666?text=News+Image';">
-                        <p class="text-gray-700 leading-relaxed">${newsItem.content}</p>
-                    `;
-                    newsContainer.appendChild(newsItemDiv);
-                });
-
-                document.getElementById('news-placeholder-content').textContent = websiteContent.news.placeholder;
-            }
-
-            // Function to populate content on the FAQ page
-            function populateFaqPage() {
-                document.getElementById('faq-title').textContent = websiteContent.faq.title;
-                const faqItemsContainer = document.getElementById('faq-items-container');
-                faqItemsContainer.innerHTML = '';
-
-                websiteContent.faq.items.forEach((item) => {
-                    const faqItemDiv = document.createElement('div');
-                    faqItemDiv.className = 'bg-white p-8 rounded-2xl shadow-xl';
-                    faqItemDiv.innerHTML = `
-                        <h3 class="text-xl font-bold text-gray-900 mb-3">${item.question}</h3>
-                        <p class="text-gray-700 leading-relaxed">${item.answer}</p>
-                    `;
-                    faqItemsContainer.appendChild(faqItemDiv);
-                });
-            }
-
-            // Function to populate footer content
-            function populateFooter() {
-                document.getElementById('current-year').textContent = new Date().getFullYear();
-                document.getElementById('footer-contact-address').textContent = websiteContent.contact.address;
-                document.getElementById('footer-contact-email').textContent = websiteContent.contact.email;
-                document.getElementById('footer-contact-email').href = `mailto:${websiteContent.contact.email}`;
-            }
-
-            // Initialize content for all pages
-            populateHomePage();
-            populateAboutPage();
-            populateTeamPage();
-            populateProjectsPage();
-            populateNewsPage();
-            populateFaqPage();
-            populateFooter();
-
-            // Event Listeners for Navigation
-            navButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const pageName = button.id.replace('nav-', '');
-                    renderPage(`${pageName}-page`);
-                });
-            });
-
-            // Initially render the home page
-            renderPage('home-page');
-            initSplitTitleScroll();
-        });
-    </script>
-<script>
-(function(){
-  function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
-
-  function initTableCurtain(){
-    var hero = document.getElementById('lucid-hero');
-    var table = document.getElementById('heroTable');
-    if(!hero || !table) return;
-
-    var cellLeft  = document.getElementById('cellLeft');
-    var cellRight = document.getElementById('cellRight');
-    var leftWord  = cellLeft && cellLeft.querySelector('.word');
-    var rightWord = cellRight && cellRight.querySelector('.word');
-    if(!cellLeft || !cellRight || !leftWord || !rightWord) return;
-
-    var imgs = table.querySelectorAll('img.word-img');
-    var wait = Array.from(imgs).map(function(img){
-      return img.complete ? Promise.resolve() : new Promise(function(res){ img.addEventListener('load', res, {once:true}); });
-    });
-    Promise.all(wait).then(measureAndBind);
-
-    function measureAndBind(){
-      // Do NOT change alignment; measure from current inner-edge-aligned state
-      leftWord.style.transform = '';
-      rightWord.style.transform = '';
-
-      var pad = 16; // change this to tweak fully-open offset // px from outer cell edges at fully opened
-
-      var cl = cellLeft.getBoundingClientRect();
-      var cr = cellRight.getBoundingClientRect();
-      var wl = leftWord.getBoundingClientRect();
-      var wr = rightWord.getBoundingClientRect();
-
-      // At rest (p=0), HCC right should already equal cl.right; LAB left equals cr.left.
-      // Targets: move to outer edges.
-      var leftTarget  = (cl.left + pad) - wl.left;       // negative shift (to the left)
-      var rightTarget = (cr.right - pad) - wr.right;     // positive shift (to the right)
-
-      function progress(){
-        var rect = hero.getBoundingClientRect();
-        var vh = window.innerHeight || document.documentElement.clientHeight;
-        var start = vh * 0.25;
-        var end   = -rect.height * 0.50;
-        var raw = (start - rect.top) / (start - end);
-        raw = Math.max(0, Math.min(1, raw));
-        return easeOutCubic(raw);
-      }
-
-      function apply(){
-        var p = progress();
-        // Start from aligned state (0), head to targets
-        leftWord.style.transform  = 'translateX(' + (leftTarget * p).toFixed(3) + 'px)';
-        rightWord.style.transform = 'translateX(' + (rightTarget * p).toFixed(3) + 'px)';
-      }
-
-      window.addEventListener('scroll', apply, {passive:true});
-      window.addEventListener('resize', function(){ setTimeout(initTableCurtain, 30); }, {passive:true});
-
-      apply();
-      setTimeout(apply, 50);
-      setTimeout(apply, 250);
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initTableCurtain, {once:true});
-  } else {
-    initTableCurtain();
-  }
-  window.addEventListener('load', initTableCurtain);
-  window.addEventListener('hashchange', function(){ setTimeout(initTableCurtain, 30); });
-})();
-</script>
-<script>
-(function(){
-  function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
-
-  function initTableCurtain(){
-    var hero = document.getElementById('lucid-hero');
-    var table = document.getElementById('heroTable');
-    if(!hero || !table) return;
-
-    var cellLeft  = document.getElementById('cellLeft');
-    var cellRight = document.getElementById('cellRight');
-    var leftWord  = cellLeft && cellLeft.querySelector('.word');
-    var rightWord = cellRight && cellRight.querySelector('.word');
-    if(!cellLeft || !cellRight || !leftWord || !rightWord) return;
-
-    // Wait images to load to get correct sizes
-    var imgs = table.querySelectorAll('img.word-img');
-    var wait = Array.from(imgs).map(function(img){
-      return img.complete ? Promise.resolve() : new Promise(function(res){ img.addEventListener('load', res, {once:true}); });
-    });
-    Promise.all(wait).then(measureAndBind);
-
-    function measureAndBind(){
-      // Start: words are ABSOLUTELY pinned to inner edges with transformX(0)
-      leftWord.style.transform  = 'translate(0,-50%)';
-      rightWord.style.transform = 'translate(0,-50%)';
-
-      var pad = 16; // px from the OUTER edges when fully opened
-
-      var cl = cellLeft.getBoundingClientRect();
-      var cr = cellRight.getBoundingClientRect();
-      var wl = leftWord.getBoundingClientRect();
-      var wr = rightWord.getBoundingClientRect();
-
-      // Targets: move HCC toward LEFT outer edge, LAB toward RIGHT outer edge
-      var leftTargetX  = (cl.left + pad) - wl.left;   // negative value to go left
-      var rightTargetX = (cr.right - pad) - wr.right; // positive value to go right
-
-      function progress(){
-        var rect = hero.getBoundingClientRect();
-        var vh = window.innerHeight || document.documentElement.clientHeight;
-        var start = vh * 0.25;
-        var end   = -rect.height * 0.50;
-        var raw = (start - rect.top) / (start - end);
-        raw = Math.max(0, Math.min(1, raw));
-        return easeOutCubic(raw);
-      }
-
-      function apply(){
-        var p = progress();
-        leftWord.style.transform  = 'translate(' + (leftTargetX * p).toFixed(3) + 'px,-50%)';
-        rightWord.style.transform = 'translate(' + (rightTargetX * p).toFixed(3) + 'px,-50%)';
-      }
-
-      window.addEventListener('scroll', apply, {passive:true});
-      window.addEventListener('resize', function(){ setTimeout(initTableCurtain, 30); }, {passive:true});
-
-      apply();
-      setTimeout(apply, 50);
-      setTimeout(apply, 250);
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initTableCurtain, {once:true});
-  } else {
-    initTableCurtain();
-  }
-  window.addEventListener('load', initTableCurtain);
-  window.addEventListener('hashchange', function(){ setTimeout(initTableCurtain, 30); });
-})();
-</script>
-<script>
-// Build pre-footer rows dynamically with clickable links, fixed descriptions, and visual previews
-(function(){
-  const ITEMS = [
-    { id: 'team-page',     label: 'TEAM',     container: '#team-members-grid',   subtitle: 'Meet the people behind the research.' },
-    { id: 'projects-page', label: 'PROJECTS', container: '#projects-grid',        subtitle: 'Our Research Projects' },
-    { id: 'news-page',     label: 'NEWS',     container: '#news-container',       subtitle: 'Latest News' },
-    { id: 'faq-page',      label: 'FAQ',      container: '#faq-items-container',  subtitle: 'Frequently Asked Questions' },
-  ];
-
-  function stripText(el){
-    if(!el) return '';
-    const clone = el.cloneNode(true);
-    clone.querySelectorAll('*').forEach(node => {
-      if(node.children.length === 0 && node.textContent.trim().length > 0){
-        node.textContent = '';
-      }
-    });
-    return clone.outerHTML;
-  }
-
-  function extractPreviewCards(section, containerSelector, label){
-    if(!section) return '';
-    const container = section.querySelector(containerSelector);
-    if(!container) return '';
-
-    function isUseful(el){
-      if(!el) return false;
-      const cs = window.getComputedStyle(el);
-      if (cs && (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) === 0)) {
-        return false;
-      }
-      if (el.classList.contains('invisible') || el.classList.contains('hidden')) return false;
-      return true;
-    }
-
-    
-let candidates = Array.from(container.children).filter(isUseful);
-
-// If the row is for TEAM, keep only Rezwana and limit to one card.
-// Fallback: if Rezwana isn't found, keep just the first useful card.
-if (label === 'TEAM') {
-  let rezwanaOnly = candidates.filter(child => {
-    const nameEl = child.querySelector('h3, .text-xl.font-bold, h3.text-xl');
-    const name = nameEl ? (nameEl.textContent || '').trim().toUpperCase() : '';
-    return name.includes('REZWANA');
-  }).slice(0,1);
-  if (rezwanaOnly.length) {
-    candidates = rezwanaOnly;
-  } else {
-    candidates = candidates.slice(0,1);
-  }
-} else {
-  // Other sections: keep up to two previews
-  candidates = candidates.slice(0,2);
-}
-if(candidates.length === 0) return '';
-
-    // Special handling for FAQ: keep text (Q + snippet)
-    if(label === 'FAQ'){
-      candidates = candidates.map(child => {
-        const q = child.querySelector('h3, h4, .font-bold, strong');
-        const a = child.querySelector('p');
-        const qText = q ? q.textContent.trim() : '';
-        const aText = a ? a.textContent.trim().slice(0,100) + (a.textContent.trim().length>100?'…':'') : '';
-        return `<div class='flex-1 min-w-[45%] bg-white text-gray-900 rounded-t-lg border border-gray-300 border-r-4 border-gray-400 h-28 p-3 overflow-hidden'>`
-             + `<div class='text-sm font-semibold mb-1'>${qText}</div>`
-             + `<div class='text-xs text-gray-700 leading-snug'>${aText}</div>`
-             + `</div>`;
-      });
-      return `<div class='flex gap-2 w-full overflow-hidden mt-3'>${candidates.join('')}</div>`;
-    }
-
-    
-    // TEAM section: show photo + short description (name + snippet from card)
-    if (label === 'TEAM') {
-      const teamCards = candidates.map(child => {
-        const imgEl = child.querySelector('img');
-        const nameEl = child.querySelector('h3, .text-xl.font-bold, h3.text-xl');
-        const roleEl = child.querySelector('p');
-        const descEl = child.querySelector('.member-desc');
-
-        const imgSrc = imgEl ? (imgEl.getAttribute('src') || '') : '';
-        const imgAlt = imgEl ? (imgEl.getAttribute('alt') || '') : (nameEl ? nameEl.textContent.trim() : 'Team member');
-        const name = nameEl ? (nameEl.textContent || '').trim() : '';
-        const role = roleEl ? (roleEl.textContent || '').trim() : '';
-        let desc = descEl ? (descEl.textContent || '').trim() : '';
-        if (!desc) desc = role;
-        // Normalize whitespace and clamp length
-        desc = (desc || '').replace(/\s+/g, ' ').trim();
-        if (desc.length > 160) desc = desc.slice(0, 157) + '…';
-
-        return (
-          `<div class='flex items-center gap-3 w-[70%] bg-white text-gray-900 rounded-t-lg border border-gray-300 border-r-4 border-gray-400 p-2 overflow-hidden'>` +
-            `<img src='${imgSrc}' alt='${imgAlt}' class='w-16 h-16 rounded-full object-cover border-2 border-gray-200' ` +
-            `onerror="this.onerror=null;this.src='https://placehold.co/64x64/CCCCCC/666666?text=+'">` +
-            `<div class='min-w-0'>` +
-              `<div class='text-sm font-semibold truncate'>${name}</div>` +
-              `<div class='text-xs text-gray-700 leading-snug line-clamp-3'>${desc}</div>` +
-            `</div>` +
-          `</div>`
-        );
-      }).join('');
-
-      return `<div class='flex justify-center w-full mt-3'>${teamCards}</div>`;
-    }
-// Other sections: keep structure but strip text, only images visible
-    const previews = candidates.map(child => {
-      return `<div class='flex-1 min-w-[45%] bg-gray-900 overflow-hidden rounded-lg ring-1 ring-white/10 h-28 hover:brightness-110 transition'>`
-           + `<div class='pointer-events-none scale-[0.92] origin-top-left translate-x-1 translate-y-1'>`
-           + stripText(child)
-           + `</div></div>`;
-    }).join('');
-
-    return `<div class='flex gap-2 w-full overflow-hidden mt-3'>${previews}</div>`;
-  }
-
-  function goTo(pageId){
-    // Local SPA navigation fallback if window.renderPage is unavailable
-    try {
-      var secs = document.querySelectorAll('.page-section');
-      secs.forEach(function(sec){ sec.classList.remove('active'); });
-      var target = document.getElementById(pageId);
-      if (target) target.classList.add('active');
-
-      // Update nav buttons
-      var navButtons = document.querySelectorAll('nav button');
-      navButtons.forEach(function(btn){
-        btn.classList.remove('active','text-gray-100');
-        btn.classList.add('text-gray-400');
-      });
-      var prefix = pageId.split('-')[0];
-      var activeBtn = document.getElementById('nav-' + prefix);
-      if (activeBtn){
-        activeBtn.classList.add('active','text-gray-100');
-        activeBtn.classList.remove('text-gray-400');
-      }
-
-      // Toggle prefooter (only on HOME)
-      var prefooter = document.getElementById('prefooter-nav');
-      if (prefooter){
-        if (pageId === 'home-page'){ prefooter.classList.remove('hidden'); }
-        else { prefooter.classList.add('hidden'); }
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch(e){ /* noop */ }
-  }
-
-  function buildRows(){
-    const container = document.getElementById('prefooter-rows');
-    if(!container) return;
-    container.innerHTML = '';
-
-    ITEMS.forEach(item => {
-      const sec = document.getElementById(item.id);
-      const subtitle = item.subtitle || '';
-      const previewCards = extractPreviewCards(sec, item.container, item.label);
-
-      const row = document.createElement('a');
-      row.href = `#${item.id}`;
-      row.setAttribute('aria-label', `Go to ${item.label}`);
-      row.className = [
-        'block w-full rounded-xl p-0 overflow-hidden',
-        'bg-gray-800 hover:bg-gray-700',
-        'ring-1 ring-white/10 hover:ring-white/20',
-        'transition-colors duration-200'
-      ].join(' ');
-      row.innerHTML = `
-        <div class="w-full px-6 pt-5">
-          <div class="text-center">
-            <div class="text-lg font-semibold tracking-wide text-white">${item.label}</div>
-            <div class="text-sm text-gray-300 mt-1">${subtitle}</div>
-          </div>
-          <div class="pb-5 pointer-events-none">${previewCards}</div>
+        <ul>
+          <li><span class="emoji">📍</span><span id="footer-contact-address">459 YR Building, Towson University, Towson, MD 21252</span></li>
+          <li><span class="emoji">⏰</span><span id="footer-hours">Monday 5:00 PM to 6:00 PM</span></li>
+          <li><span class="emoji">✉️</span><a class="hover:underline" href="mailto:jrezwana@towson.edu" id="footer-contact-email">jrezwana@towson.edu</a></li>
+          <li><span class="emoji">🏛️</span><a class="hover:underline" href="https://www.towson.edu" rel="noopener noreferrer" target="_blank">Towson University</a></li>
+        </ul>
+        <p class="copyright"><br><br>© <span id="current-year"></span> Human-Centered Computing Lab. All rights reserved.</p>
+      </div>
+      <!-- Right: map -->
+      <div>
+        <div class="map-wrap">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2374.0819890750504!2d-76.60929467225354!3d39.390662236845756!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c80fa2cf86a6a9%3A0x36774b98ccc72a6d!2s7800%20York%20Rd%2C%20Towson%2C%20MD%2021252!5e1!3m2!1sen!2sus!4v1758401573261!5m2!1sen!2sus"
+            width="100%" height="450" style="border:0;" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen=""></iframe>
         </div>
-      `;
-      row.addEventListener('click', function(e){ if (typeof window.renderPage === 'function') {
-          /* prevent default only when SPA handler exists */ e.preventDefault();
-          const targetId = item.id;
-          if (history && history.pushState) {
-            history.pushState(null, '', `#${targetId}`);
-          } else {
-            location.hash = `#${targetId}`;
-          }
-          window.renderPage(targetId);
-          setActive(targetId);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+      </div>
+    </div>
+  </footer>
+  <script>
+    // Footer: set current year
+    (function(){ var el = document.getElementById('current-year'); if(el){ el.textContent = new Date().getFullYear(); } })();
+  </script>
+
+<script>
+  (function(){
+    // Map section keys to their header/content IDs
+    var sections = {
+      about: {header: "aboutHeader", content: "aboutContent", section: "aboutSection"},
+      team: {header: "teamHeader", content: "teamContent", section: "teamSection"},
+      projects: {header: "projectsHeader", content: "projectsContent", section: "projectsSection"},
+      publications: {header: "publicationsHeader", content: "publicationsContent", section: "publicationsSection"},
+      news: {header: "newsHeader", content: "newsContent", section: "newsSection"}
+    };
+
+    function openSection(key){
+      if(!sections[key]) return;
+      Object.keys(sections).forEach(function(k){
+        var c = document.getElementById(sections[k].content);
+        var h = document.getElementById(sections[k].header);
+        if(!c) return;
+        if(k === key){
+          c.style.display = "block";
+          if(h) h.setAttribute("aria-expanded","true");
+        } else {
+          c.style.display = "none";
+          if(h) h.setAttribute("aria-expanded","false");
         }
       });
-      container.appendChild(row);
-    });
-  }
-
-  function setActive(pageId){
-    const container = document.getElementById('prefooter-rows');
-    if(!container) return;
-    [...container.children].forEach(el => {
-      const active = el.getAttribute('href') === `#${pageId}`;
-      el.classList.toggle('bg-gray-700', active);
-      el.classList.toggle('bg-gray-800', !active);
-    });
-  }
-
-  function init(){
-    // Route initial hash if present
-    try {
-      var h = (location.hash || '').replace(/^#/, '');
-      if (h) {
-        if (typeof window.renderPage === 'function') window.renderPage(h);
-        else goTo(h);
+      // Smooth scroll to the section header
+      var sec = document.getElementById(sections[key].section) || document.getElementById(sections[key].header);
+      if(sec && sec.scrollIntoView) {
+        sec.scrollIntoView({behavior:"smooth", block:"start"});
       }
-    } catch(e){}
-
-    buildRows();
-    const active = document.querySelector('.page-section.active');
-    if(active) setActive(active.id);
-    const observer = new MutationObserver(() => {
-      const act = document.querySelector('.page-section.active');
-      if(act) setActive(act.id);
-    });
-    document.querySelectorAll('.page-section').forEach(sec => {
-      observer.observe(sec, { attributes: true, attributeFilter: ['class'] });
-    });
-    setTimeout(buildRows, 300);
-  }
-
-  window.addEventListener('hashchange', function(){
-    var h = (location.hash || '').replace(/^#/, '');
-    if (h){
-      if (typeof window.renderPage === 'function') window.renderPage(h);
-      else goTo(h);
     }
-  });
-  if (document.readyState === 'complete') {
-    init();
-  } else {
-    window.addEventListener('load', init, { once: true });
-  }
-})();
-</script>
 
-<style>
-  /* Prefooter reveal (scroll-in) */
-  #prefooter-nav { will-change: opacity, transform; }
-  #prefooter-nav.prefooter-ready .reveal {
-    opacity: 0;
-    transform: translateY(24px) scale(0.98);
-  }
-  #prefooter-nav.prefooter-ready .reveal.inview {
-    opacity: 1;
-    transform: none;
-    transition:
-      opacity .6s cubic-bezier(.22,.61,.36,1),
-      transform .6s cubic-bezier(.22,.61,.36,1);
-    transition-delay: var(--reveal-delay, 0ms);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    #prefooter-nav.prefooter-ready .reveal { opacity: 1; transform: none; transition: none; }
-  }
-</style>
-
-<script>
-(function () {
-  var prefooter = document.getElementById('prefooter-nav');
-  if (!prefooter) return;
-  var rowsHost = prefooter.querySelector('#prefooter-rows');
-  if (!rowsHost) return;
-  function setupReveals() {
-    if (!rowsHost.children.length) return false;
-    prefooter.classList.add('prefooter-ready');
-    Array.prototype.forEach.call(rowsHost.children, function (row, i) {
-      row.classList.add('reveal');
-      row.style.setProperty('--reveal-delay', (i * 100) + 'ms');
-    });
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('inview');
-          io.unobserve(entry.target);
+    // Handle clicks on header nav
+    document.querySelectorAll('header.site-header .nav-links a[data-target]').forEach(function(a){
+      a.addEventListener('click', function(e){
+        e.preventDefault();
+        var key = a.getAttribute('data-target');
+        if(key === 'contact'){
+          // scroll to footer/contact
+          var el = document.getElementById('footer-contact-address') || document.querySelector('footer');
+          if(el && el.scrollIntoView) el.scrollIntoView({behavior:"smooth", block:"start"});
+          return;
         }
+        openSection(key);
       });
-    }, { root: null, threshold: 0.15 });
-    Array.prototype.forEach.call(rowsHost.children, function (row) { io.observe(row); });
-    return true;
-  }
-  if (!setupReveals()) {
-    var mo = new MutationObserver(function () {
-      if (setupReveals()) mo.disconnect();
     });
-    mo.observe(rowsHost, { childList: true });
-  }
-})();
-</script>
 
-
-<script>
-(function () {
-  var prefooter = document.getElementById('prefooter-nav');
-  if (!prefooter) return;
-  var rows = prefooter.querySelector('#prefooter-rows');
-  if (!rows) return;
-  function applyCardClass(){
-    Array.prototype.forEach.call(rows.children, function(el){
-      el.classList.add('prefooter-card');
-    });
-  }
-  if (rows.children.length) {
-    applyCardClass();
-  } else {
-    var mo = new MutationObserver(function(){
-      if (rows.children.length){
-        applyCardClass();
-        mo.disconnect();
-      }
-    });
-    mo.observe(rows, {childList: true});
-  }
-})();
+    // Expose function in case other parts need it
+    window.openLabSection = openSection;
+  })();
 </script>
 
 </body>
